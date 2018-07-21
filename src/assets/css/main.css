@@ -1,0 +1,21 @@
+/*.thetarget{
+	background-color: #4D72EE;
+	width: 40px;
+	height: 40px;
+	border-radius: 20px;
+	position: absolute;
+}
+.fade-enter-active{
+	animation: fade-in 1s linear;
+}
+.fade-leave-active {
+
+}
+@keyframes fade-in {
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
+	}
+}*/
