@@ -1,16 +1,12 @@
 <template>
   <div class="exactaiming">
   	<div>
-  		<transition name="fade">
-  			<TheTarget v-show="targetAppear"></TheTarget>
-  		</transition>
-      <transition name="fade">
+  		<!-- <transition name="fade"> -->
+  			<TheTarget :vshow="targetAppear"></TheTarget>
+        <!-- <TheTarget v-show="targetAppear"></TheTarget>
         <TheTarget v-show="targetAppear"></TheTarget>
-      </transition>
-      <!-- <transition-group name="fade">
-        <TheTarget v-show="targetAppear"></TheTarget>
-        <TheTarget v-show="targetAppear"></TheTarget>
-      </transition-group> -->
+        <TheTarget v-show="targetAppear"></TheTarget> -->
+  		<!-- </transition> -->
   	</div>
   </div>
 </template>
