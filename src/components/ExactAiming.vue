@@ -1,12 +1,17 @@
 <template>
   <div class="exactaiming">
   	<div>
-  		<transition name="fade">
+  		<!-- <transition name="fade">
   			<TheTarget v-show="targetAppear"></TheTarget>
-  		</transition>
-      <transition name="fade">
         <TheTarget v-show="targetAppear"></TheTarget>
-      </transition>
+  		</transition> -->
+      <transition-group name="list-complete" tag="p">
+        <!-- <TheTarget v-show="targetAppear"></TheTarget> -->
+        <TheTarget v-for="(item,index) in items" :key="index" v-show="targetAppear" :style="{left: (index+1)*100+'px'}" class="list-complete-item"></TheTarget>
+      </transition-group>
+      <!-- <transition name="fade">
+        <TheTarget v-show="targetAppear"></TheTarget>
+      </transition> -->
       <!-- <transition-group name="fade">
         <TheTarget v-show="targetAppear"></TheTarget>
         <TheTarget v-show="targetAppear"></TheTarget>
@@ -23,12 +28,13 @@ export default {
   components: {TheTarget},
   data () {
     return {
+      items: [1,2,3],
     	targetAppear: false
     }
   },
   mounted: function(){
   	setTimeout(function(){
-  		console.log(this)
+  		// console.log(this)
   		this.targetAppear = true;
   	}.bind(this), 1000)
   }
@@ -55,5 +61,17 @@ export default {
 		height: 500px;
 		background-color: #000000;
 	}
+  .list-complete-item {
+    transition: all 1s;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .list-complete-enter, .list-complete-leave-to{
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  .list-complete-leave-active {
+    position: absolute;
+  }
 	
 </style>
