@@ -16,14 +16,14 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 	.thetarget{
-    background-color: #4D72EE;
+    /*background-color: #4D72EE;
     width: 40px;
     height: 40px;
     border-radius: 20px;
     position: absolute;
-    cursor: crosshair;
+    cursor: crosshair;*/
   }
-  .fade-enter-active{
+ /* .fade-enter-active{
     animation: fade-in 1s linear;
   }
   .fade-leave-active {
@@ -36,7 +36,7 @@ export default {
     100% {
       transform: scale(1);
     }
-  }
+  }*/
 </style>
 <style type="text/css">
   /*.thetarget{
