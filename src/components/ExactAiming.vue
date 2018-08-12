@@ -4,29 +4,13 @@
   		<!-- <transition name="fade">
   			<TheTarget v-show="targetAppear"></TheTarget>
   		</transition> -->
-      <!-- <transition-group name="list-complete" tag="p" 
-      v-on:before-enter="beforeEnter" 
-      v-on:enter="enter" 
-      v-on:after-enter="afterEnter" 
-      v-on:enter-cancelled="enterCancelled" 
-      v-on:before-leave="beforeLeave" 
-      v-on:leave="leave" 
-      v-on:after-leave="afterLeave"
-      v-on:leave-cancelled="leaveCancelled"> -->
       <transition-group name="list-complete" tag="p" 
-      v-on:before-enter="beforeEnter" 
-      v-on:enter="enter" 
-      v-on:after-enter="afterEnter">
-        <!-- <TheTarget v-for="(item,index) in items" :key="index" v-if="targetAppear" :style="{left: (index+1)*100+'px'}" class="list-complete-item"></TheTarget> -->
-        <TheTarget v-for="(item,index) in items" :key="index" :style="{left: (index+1)*100+'px'}" class="list-complete-item" :data-index="index"></TheTarget>
+        v-on:before-enter="beforeEnter" 
+        v-on:enter="enter" 
+        v-on:after-enter="afterEnter">
+        <!-- <TheTarget v-for="(item,index) in items" :key="index" v-bind:style="{left: item.left+'px', top: item.top+'px'}" class="list-complete-item" :data-index="index" :other="'index:'+index+';'+'item:'+JSON.stringify(item)" @click></TheTarget> -->
+        <TheTarget v-for="(item,index) in items" :key="index" :left="item.left" :top="item.top" class="list-complete-item" :other="'index:'+index+';'+'item:'+JSON.stringify(item)" @addScore="addScore"></TheTarget>
       </transition-group>
-      <!-- <transition name="fade">
-        <TheTarget v-show="targetAppear"></TheTarget>
-      </transition> -->
-      <!-- <transition-group name="fade">
-        <TheTarget v-show="targetAppear"></TheTarget>
-        <TheTarget v-show="targetAppear"></TheTarget>
-      </transition-group> -->
   	</div>
   </div>
 </template>
@@ -39,51 +23,81 @@ export default {
   components: {TheTarget},
   data () {
     return {
-      items: [1,2],
+      // items: [1,2],
+      items: [],
+      score: 0,
     	targetAppear: false
     }
   },
   methods: {
     beforeEnter(){
-      console.log('beforeEnter')
-      console.log(new Date())
+      // console.log('beforeEnter')
+      // console.log(new Date())
     },
     enter(){
-      console.log('enter')
-      console.log(new Date())
+      // console.log('enter')
+      // console.log(new Date())
     },
     afterEnter(el){
-      console.log('afterEnter')
-      console.log(new Date())
-      console.log(el.dataset.index,'el')
-      console.log(el,'el')
-      el.style.display = 'none';
-      // el.parentNode.removeChild(el);
-      this.items.splice(el.dataset.index, 1)
-    }/*,
-    enterCancelled(){
-      console.log('enterCancelled')
+      // console.log('afterEnter')
+      // console.log(new Date())
+      // console.log(el.dataset,'el')
+      // console.log(el.dataset.index,'el')
+      
+      // console.log(el,'el')
+      // debugger;
+      // el.style.display = 'none';
+      
+      // this.items.splice(el.dataset.index, 1)
+      // console.log(el.getAttribute('other'), 'other')
+      // console.log(el,'el')
+      // console.log(el.parentNode,'parentNodeparentNode')
+      if(el&&el.parentNode){
+        el.parentNode.removeChild(el);
+      }
+      
+      // console.log(this.items, 'items')
     },
-    beforeLeave(){
-      console.log('beforeLeave')
-    },
-    leave(){
-      console.log('leave')
-    },
-    afterLeave(){
-      console.log('afterLeave')
-    },
-    leaveCancelled(){
-      console.log('leaveCancelled')
-    }*/
+    addScore(){
+      this.score++;
+      console.log(this.score, 'this.score')
+    }
 
   },
   mounted: function(){
-    this.items.push(3);
+    
+    var cnt = 0,
+        timer,
+        tempItem,
+        randomLeft,
+        randomTop;
+    // setTimeout(function(){
+    //   this.items.splice(0,0,3);
+    // }.bind(this), 1000)
+
+   //  this.items.push(1);
   	// setTimeout(function(){
-  	// 	// this.targetAppear = true;
-   //    this.items.push(3);
+   //    this.items.push(2);
   	// }.bind(this), 1000)
+
+   //  setTimeout(function(){
+   //    this.items.push(3);
+   //  }.bind(this), 2000)
+
+    timer = setInterval(function(){
+      randomLeft = Math.random();
+      randomTop = Math.random();
+      tempItem = cnt++;
+      this.items.push({
+        value: tempItem,
+        left: randomLeft*450,
+        top: randomTop*450
+      });
+      if(cnt === 20){
+        clearTimeout(timer)
+        console.log(this.score, 'score')
+      }
+    }.bind(this),1000)
   }
 }
 </script>
@@ -127,7 +141,7 @@ export default {
 
   }
   .list-complete-enter-active{
-    animation: fade-in 1s linear;
+    animation: fade-in 1.2s linear;
     /*animation-fill-mode: forwards;*/
   }
   .list-complete-leave-active{

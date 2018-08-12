@@ -1,14 +1,26 @@
 <template>
-  <div class="thetarget">
+  <div class="thetarget" @click="clickTarget" :style="{left: left+'px', top: top+'px'}">
   </div>
 </template>
 
 <script>
 export default {
   name: 'TheTarget',
+  props: ['left', 'top'],
   data () {
     return {
     }
+  },
+  methods: {
+    clickTarget(){
+      // this.score++;
+      // console.log(this.score, '33333333')
+      console.log('44444444444444')
+      console.log(this, 'this')
+      this.$el.parentNode.removeChild(this.$el);
+      this.$emit('addScore')
+    }
+
   }
 }
 </script>
@@ -22,6 +34,8 @@ export default {
     border-radius: 20px;
     position: absolute;
     cursor: crosshair;*/
+    /*background: url('../assets/inu2.jpg')  no-repeat center center;
+    background-size:cover;*/
   }
  /* .fade-enter-active{
     animation: fade-in 1s linear;
