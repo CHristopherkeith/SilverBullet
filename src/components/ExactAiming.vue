@@ -18,6 +18,8 @@
 <script>
 import TheTarget from './TheTarget'
 import PressReaction from './PressReaction'
+import { mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   name: 'ExactAiming',
   components: {TheTarget},
@@ -25,7 +27,7 @@ export default {
     return {
       // items: [1,2],
       items: [],
-      score: 0,
+      // score: 0,
     	targetAppear: false
     }
   },
@@ -58,12 +60,25 @@ export default {
       
       // console.log(this.items, 'items')
     },
-    addScore(){
-      this.score++;
-      console.log(this.score, 'this.score')
-    }
+    // addScore(){
+    //   this.score++;
+    //   console.log(this.score, 'this.score')
+    //   this.$store.commit('ADD_SCORE');
+    //   console.log(this.$store.state.score, '$score')
+    // },
+    // addScore(){
+    //   this.$store.commit('ADD_SCORE');
+    //   console.log(this.$store.state.score, '$score')
+    //   console.log(this.score, 'score')
+    // }
+    ...mapMutations({
+      addScore: 'ADD_SCORE'
+    })
 
   },
+  computed: mapState([
+    'score',
+  ]),
   mounted: function(){
     
     var cnt = 0,
@@ -96,6 +111,7 @@ export default {
       if(cnt === 20){
         clearTimeout(timer)
         console.log(this.score, 'score')
+
       }
     }.bind(this),1000)
   }
