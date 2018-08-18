@@ -10,7 +10,8 @@ const store = new Vuex.Store({
 	mutations: {
 		[types.ADD_SCORE](state,payload){
 			state.score = state.score + 1;
-			console.log('233333333333')
+			// console.log('233333333333')
+			console.log(state.score, 'state.score')
 		}
 	}
 })
