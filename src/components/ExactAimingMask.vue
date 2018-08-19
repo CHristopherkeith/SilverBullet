@@ -1,6 +1,6 @@
 <template>
   <div class="exactAimingMask" v-show="maskShow">
-    <p @click="triggerStart">点击开始</p>
+    <p @click="triggerStart">{{maskText}}</p>
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'ExactAimingMask',
   // components: {TheTarget},
-  props: ['maskShow'],
+  props: ['maskShow', 'maskText'],
   data () {
     return {
     }

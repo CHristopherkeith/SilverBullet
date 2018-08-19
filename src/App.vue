@@ -16,12 +16,14 @@ export default {
   margin: 0px;
   padding: 0px;
 }
-/*html, body{
+html, body{
   width: 100%;
   height: 100%;
 }
-#myApp {
+#myApp{
   width: 100%;
   height: 100%;
-}*/
+  background: url(./assets/img/bg.gif) repeat;
+}
+
 </style>

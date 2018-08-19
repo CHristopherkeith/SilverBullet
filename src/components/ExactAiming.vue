@@ -1,31 +1,37 @@
 <template>
   <div class="exactaiming">
-  	<div>
+  	<div class="mainPanel">
       <span class="time">{{time}} s</span>
-      <ExactAimingMask :maskShow="maskShowValue" @update:maskShow="newValue=>maskShowValue=newValue" @trigger:exactAimingStart="exactAimingStart"></ExactAimingMask>
+      <ExactAimingMask :maskShow="maskShowValue" @update:maskShow="newValue=>maskShowValue=newValue" @trigger:exactAimingStart="exactAimingStart" :maskText="maskTextValue"></ExactAimingMask>
       <!-- <ExactAimingMask :maskShow.sync="maskShowValue"></ExactAimingMask> -->
       <transition-group name="list-complete"
         v-on:after-enter="afterEnter">
-        <TheTarget v-for="(item,index) in items" :key="index" :left="item.left" :top="item.top" class="list-complete-item" :other="'index:'+index+';'+'item:'+JSON.stringify(item)" @addScore="addScore"></TheTarget>
+        <TheTarget v-for="(item,index) in items" :key="index" :left="item.left" :top="item.top" class="list-complete-item" @addScore="addScore"></TheTarget>
       </transition-group>
   	</div>
+    <div class="scorePanel">
+      <RecordBoard :score="score"></RecordBoard>
+    </div>
   </div>
 </template>
 
 <script>
 import TheTarget from './TheTarget'
 import ExactAimingMask from './ExactAimingMask'
+import RecordBoard from './RecordBoard'
 import { mapMutations } from 'vuex'
 import { mapState } from 'vuex'
 export default {
   name: 'ExactAiming',
-  components: {TheTarget, ExactAimingMask},
+  components: {TheTarget, ExactAimingMask, RecordBoard},
   data () {
     return {
       items: [],
     	targetAppear: false,
       maskShowValue: true,
-      time: 0
+      maskTextValue: '点击开始',
+      time: 0,
+      count: 20
     }
   },
   methods: {
@@ -49,24 +55,33 @@ export default {
           timer,
           tempItem,
           randomLeft,
-          randomTop,
-          startTime = new Date();
+          randomTop;
+          // startTime = new Date();
 
       timer = setInterval(function(){
         randomLeft = Math.random();
         randomTop = Math.random();
         tempItem = cnt++;
-        this.items.push({
-          value: tempItem,
-          left: randomLeft*450,
-          top: randomTop*450
-        });
-        this.time = Math.floor((new Date() - startTime)/1000);
         console.log(this.time, 'this.time')
-        if(this.time >= 20){
-          clearTimeout(timer)
-          console.log(this.score, 'score')
+        if(this.time >= this.count){
+          setTimeout(function(){
+            clearTimeout(timer);
+            this.maskShowValue = true;
+            this.maskTextValue = '再玩一次？点击开始';
+            this.time = 0;
+            console.log(this.score, 'score')
+          }.bind(this), 200)
+        }else{
+          this.items.push({
+            value: tempItem,
+            left: randomLeft*450,
+            top: randomTop*450
+          });
+          // this.time = Math.floor((new Date() - startTime)/1000);
+          this.time ++;
         }
+        
+        
       }.bind(this),1000)
 
     }
@@ -101,7 +116,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .time{
     color: #ffffff;
@@ -109,7 +123,7 @@ export default {
     top: 5px;
     right: 5px;
   }
-	.exactaiming>div, .exactAimingMask{
+	.exactaiming/*, .exactAimingMask*/{
 		position: absolute;
 		margin: auto;
 		padding: auto;
@@ -117,14 +131,28 @@ export default {
 		right: 0;
 		top: 0;
 		bottom: 0;
-		width: 500px;
+		width: 730px;
 		height: 500px;
-		background-color: #000000;
+		/*background-color: #000000;*/
 	}
+  .exactaiming>div{
+    /*display: inline-block;*/
+    position: relative;
+    float: left;
+    height: 100%;
+  }
   .exactAimingMask{
-    /*background-color: #ffffff;*/
-    /*opacity: 0.2;*/
     z-index: 1;
+    width: 100%;
+    height: 100%;
+  }
+  .mainPanel{
+    width: 500px;
+    background-color: #000000;
+    box-shadow: 0px 0px 5px 5px #000000;
+  }
+  .scorePanel{
+    width: 230px;
   }
   .list-complete-item {
     background-color: #4D72EE;
