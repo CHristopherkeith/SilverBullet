@@ -1,8 +1,8 @@
 <template>
   <div class="exactaiming">
   	<div class="mainPanel">
-      <span class="time">{{time}} s</span>
-      <ExactAimingMask :maskShow="maskShowValue" @update:maskShow="newValue=>maskShowValue=newValue" @trigger:exactAimingStart="exactAimingStart" :maskText="maskTextValue"></ExactAimingMask>
+      <span class="time" v-show="!maskShowValue">{{time}} s</span>
+      <ExactAimingMask :maskShow="maskShowValue" @update:maskShow="newValue=>maskShowValue=newValue" @trigger:exactAimingStart="exactAimingStart" :maskText="maskTextValue" :duration="durationValue"></ExactAimingMask>
       <!-- <ExactAimingMask :maskShow.sync="maskShowValue"></ExactAimingMask> -->
       <transition-group name="list-complete"
         v-on:after-enter="afterEnter">
@@ -29,9 +29,9 @@ export default {
       items: [],
     	targetAppear: false,
       maskShowValue: true,
-      maskTextValue: '点击开始',
+      maskTextValue: 'CLICK TO START',
       time: 0,
-      count: 20
+      durationValue: 5
     }
   },
   methods: {
@@ -50,7 +50,7 @@ export default {
       addScore: 'ADD_SCORE'
     }),
     exactAimingStart(){
-      // console.log('start...')
+      this.$store.commit('CLEAR_SCORE');
       var cnt = 0,
           timer,
           tempItem,
@@ -62,12 +62,12 @@ export default {
         randomLeft = Math.random();
         randomTop = Math.random();
         tempItem = cnt++;
-        console.log(this.time, 'this.time')
-        if(this.time >= this.count){
+        // console.log(this.time, 'this.time')
+        if(this.time >= this.durationValue){
           setTimeout(function(){
             clearTimeout(timer);
             this.maskShowValue = true;
-            this.maskTextValue = '再玩一次？点击开始';
+            this.maskTextValue = 'PLAY AGAIN?CLICK!';
             this.time = 0;
             console.log(this.score, 'score')
           }.bind(this), 200)
