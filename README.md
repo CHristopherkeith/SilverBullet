@@ -42,5 +42,23 @@
 
 ## 三、智能合约  
 1.智能合约采用星云链作为部署公链，合约代码见contract文件夹  
-2.部署到区块链......  
-3.钱包安装......  
+2.智能合约设计：  
+2.1.合约数据结构  
+2.1.1.计分对象  
+ScoreContent:  
+{  
+    exactScore: null,  
+    exactMisses: null,  
+    exactMissesTgt: null,  
+    pressScore: null,  
+    pressMisses: null,  
+    pressMissesTgt: null  
+}  
+{  
+    userAddress1: JSON.stringify(ScoreContent1),  
+    userAddress2: JSON.stringify(ScoreContent2),  
+    ......,  
+    userAddressN: JSON.stringify(ScoreContentN),  
+}  
+3.部署到区块链......  
+4.钱包安装......  
