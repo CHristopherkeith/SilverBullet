@@ -54,6 +54,7 @@ ScoreContent:
     pressMisses: null,  
     pressMissesTgt: null  
 }  
+SilverBulletContract:  
 {  
     userAddress1: JSON.stringify(ScoreContent1),  
     userAddress2: JSON.stringify(ScoreContent2),  
