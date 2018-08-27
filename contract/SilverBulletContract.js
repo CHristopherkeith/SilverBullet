@@ -42,13 +42,32 @@ SilverBulletContract.prototype = {
 		this.numOfPlayers = 0;
 	},
 
-	saveScore: function(value){
-		var exactScore, exactMisses, exactMissesTgt;
+	saveScore: function(value, type){
+		var score, misses, missesTgt, newScoreContent;
+		var scoreField = type + 'Score',
+			missesField = type + 'Misses',
+			missesTgtField = type + 'MissesTgt';
 		var from = Blockchain.transaction.from;
 		var valueObj = JSON.parse(value);
-		var scoreContent = this.silverBullet.get(from);
-		if(scoreContent){
-			// if(scoreContent.exactScore&&)
+		var originalScore = this.silverBullet.get(from);
+		score = new BigNumber(valueObj.score);
+		misses = new BigNumber(valueObj.misses);
+		missesTgt = new BigNumber(valueObj.missesTgt);
+		if(type!=='exact'&&type!=='press'){
+			throw new Error("Not the correct type.");
 		}
+		if(originalScore&&originalScore[scoreField].gt(score)){
+			throw new Error("Not the best score.");
+		}
+		if(originalScore){
+			newScoreContent = originalScore;
+		}else{
+			newScoreContent = new ScoreContent();
+		}
+		newScoreContent[scoreField] = score;
+		newScoreContent[missesField] = misses;
+		newScoreContent[missesTgtField] = missesTgt;
+		this.silverBullet.put(from, newScoreContent);
+
 	}
 }
