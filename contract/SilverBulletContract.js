@@ -34,16 +34,20 @@ var SilverBulletContract = function(){
 			return o.toString();
 		}
 	});
+	LocalContractStorage.defineMapProperty(this, "arrayMap");
+	LocalContractStorage.defineProperty(this, "size");
 	this.numOfPlayers = null;
 };
 
 SilverBulletContract.prototype = {
 	init: function (){
 		this.numOfPlayers = 0;
+		this.size = 0;
 	},
 
 	saveScore: function(value, type){
 		var score, misses, missesTgt, newScoreContent;
+		var index = this.size;
 		var scoreField = type + 'Score',
 			missesField = type + 'Misses',
 			missesTgtField = type + 'MissesTgt';
@@ -63,11 +67,54 @@ SilverBulletContract.prototype = {
 			newScoreContent = originalScore;
 		}else{
 			newScoreContent = new ScoreContent();
+			this.arrayMap.set(index, from);
+			this.size +=1;
 		}
 		newScoreContent[scoreField] = score;
 		newScoreContent[missesField] = misses;
 		newScoreContent[missesTgtField] = missesTgt;
-		this.silverBullet.put(from, newScoreContent);
+		this.silverBullet.set(from, newScoreContent);
+	},
 
+	getScore: function(){
+		var from = Blockchain.transaction.from;
+		return this.silverBullet.get(from);
+	},
+
+	numOfPlayers: function(){
+		return this.numOfPlayers;
+	},
+
+	getDataSize: function(){
+		return this.size;
+	},
+
+	forEach: function(limit, offset){
+        limit = parseInt(limit);
+        offset = parseInt(offset);
+        if(offset>this.size){
+           throw new Error("offset is not valid");
+        }
+        var number = offset+limit;
+        if(number > this.size){
+          number = this.size;
+        }
+        var result = [];
+        for(var i=offset;i<number;i++){
+            var key = this.arrayMap.get(i);
+            var object = this.silverBullet.get(key);
+            // result += "index:"+i+" key:"+ key + " value:" +object+"_";
+            result.push({index: i, key: key, value: object})
+        }
+        return result;
+    },
+
+	verifyAddress: function(address){
+		// 1-valid, 0-invalid
+		var result = Blockchain.verifyAddress(address);
+		return {
+			valid: result == 0 ? false : true
+	    };
 	}
-}
+};
+module.exports = SilverBulletContract;
