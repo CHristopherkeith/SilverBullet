@@ -39,21 +39,33 @@
         </div>
       </li>
     </ul>
+    <ul class="recordBoardBest">
+      <li class="recordBoardTitle">
+        <span>Best</span>
+        <span class="totalScore">{{best.bestCcore}}</span>
+      </li>
+      <li>
+        <div class="targetCount">
+          <span>Hits</span>
+          <span class="targetCountRes">{{best.bestHits}}</span>
+        </div>
+      </li>
+      <li>
+        <div class="targetCount">
+          <span>Misses</span>
+          <span class="targetCountRes">{{best.bestMisses}}</span>
+        </div>
+      </li>
+      <li>
+        <div class="targetCount">
+          <span>Missed targets</span>
+          <span class="targetCountRes">{{best.bestMissesTgt}}</span>
+        </div>
+      </li>
+    </ul>
     <ul class="recordBoardPrizes">
       <li class="recordBoardTitle">
         <span>Prizes</span>
-      </li>
-      <li>
-        <div class="targetCount">
-          <span>100000 pts</span>
-          <span class="targetCountPrize"><span>500</span> Nas</span>
-        </div>
-      </li>
-      <li>
-        <div class="targetCount">
-          <span>90000 pts</span>
-          <span class="targetCountPrize"><span>300</span> Nas</span>
-        </div>
       </li>
       <li>
         <div class="targetCount">
@@ -111,7 +123,7 @@
 export default {
   name: 'RecordBoard',
   // components: {TheTarget},
-  props: ['score'],
+  props: ['score', 'best'],
   data () {
     return {
     }
@@ -193,6 +205,9 @@ export default {
     font-size: 16px !important;
   }
   .recordBoardPrizes{
-    padding-top: 65px;
+    padding-top: 15px;
+  }
+  .recordBoardBest{
+    padding-top: 15px;
   }
 </style>

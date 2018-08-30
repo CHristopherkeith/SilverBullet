@@ -10,7 +10,7 @@
       </transition-group>
   	</div>
     <div class="scorePanel">
-      <RecordBoard :score="score"></RecordBoard>
+      <RecordBoard :score="score" :best="bestValue"></RecordBoard>
     </div>
   </div>
 </template>
@@ -31,7 +31,13 @@ export default {
       maskShowValue: true,
       maskTextValue: 'CLICK TO START',
       time: 0,
-      durationValue: 5
+      durationValue: 5,
+      bestValue: {
+        bestCcore: 0,
+        bestHits: 0,
+        bestMisses: 0,
+        bestMissesTgt: 0
+      }
     }
   },
   methods: {
