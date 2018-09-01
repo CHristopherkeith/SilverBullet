@@ -9,7 +9,7 @@
       <br>
       Left target: <span>-500</span> pts
     </p>
-    <p class="clickText" @click="triggerStart">{{maskText}}</p>
+    <p class="clickText" :class="{alertCls: alertClsValue}" @click="triggerStart">{{maskText}}</p>
   </div>
 </template>
 
@@ -22,13 +22,35 @@ export default {
   props: ['maskShow', 'maskText', 'duration'],
   data () {
     return {
+      // alertClsValue: false
     }
   },
+  // mapState方式
+  computed: mapState({
+    hasWalletExt: state => state.hasWalletExt,
+    alertClsValue(state){
+      return !state.hasWalletExt;
+    }
+  }),
+  // 混入方式
+  // computed: {
+  //   ...mapState([
+  //     'hasWalletExt'
+  //   ]),
+  //   alertClsValue(){
+  //     return !this.$store.state.hasWalletExt;
+  //   }
+  // },
   methods: {
     triggerStart(){
-      // this.maskShow = false;
-      this.$emit('update:maskShow', false);
-      this.$emit('trigger:exactAimingStart');
+      // console.log(this.hasWalletExt, 'this.$store.hasWalletExt')
+      if(this.hasWalletExt){
+        this.$emit('update:maskShow', false);
+        this.$emit('trigger:exactAimingStart');
+      }else{
+        alert('Please Install WebExtensionWallet First');
+      }
+      
     }
   },
   // computed: mapState([
@@ -51,6 +73,9 @@ export default {
     line-height: 500px;
     user-select: none;
     letter-spacing: 5px;
+  }
+  .alertCls{
+    color: red !important;
   }
   .exactAimingMask>p.instructions{
     position: absolute;

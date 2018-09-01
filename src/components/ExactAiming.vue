@@ -95,6 +95,7 @@ export default {
   },
   computed: mapState([
     'score',
+    'hasWalletExt'
   ]),
   mounted: function(){
     
@@ -118,6 +119,11 @@ export default {
     //     console.log(this.score, 'score')
     //   }
     // }.bind(this),1000)
+     this.$store.commit('CHECK_WALLET_EXT');
+     console.log(this.hasWalletExt, 'hasWalletExt')
+     if(!this.hasWalletExt){
+        this.maskTextValue = 'Please Install WebExtensionWallet First';
+     }
   }
 }
 </script>
