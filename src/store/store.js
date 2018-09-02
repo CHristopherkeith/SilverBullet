@@ -24,7 +24,7 @@ const store = new Vuex.Store({
 			}
 		},
 		[types.GET_USER_ADDRESS](state,payload){
-			console.log("********* get account ************")
+			// console.log("********* get account ************")
 		    window.postMessage({
 		        "target": "contentscript",
 		        "data":{
@@ -41,7 +41,19 @@ const store = new Vuex.Store({
 		}
 	},
 	actions: {
+		getScore({commit, state }){
+			return new Promise((resolve, reject) => {
+				Neb.api.getAccountState(/*state.userAddress*/'n1JLrc9qXkGY7WS5UiZoXPvPbz177Wew5ta')
+				.then(
+					res => {
+						console.log(res, '【res】')
+					},
+					err => {
 
+					}
+				)
+			})
+		}
 	}
 })
 

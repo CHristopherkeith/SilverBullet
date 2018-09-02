@@ -47,11 +47,6 @@ export default {
         el.parentNode.removeChild(el);
       }
     },
-    // addScore(){
-    //   this.$store.commit('ADD_SCORE');
-    //   console.log(this.$store.state.score, '$score')
-    //   console.log(this.score, 'score')
-    // }
     ...mapMutations({
       addScore: 'ADD_SCORE'
     }),
@@ -62,13 +57,11 @@ export default {
           tempItem,
           randomLeft,
           randomTop;
-          // startTime = new Date();
 
       timer = setInterval(function(){
         randomLeft = Math.random();
         randomTop = Math.random();
         tempItem = cnt++;
-        // console.log(this.time, 'this.time')
         if(this.time >= this.durationValue){
           setTimeout(function(){
             clearTimeout(timer);
@@ -83,7 +76,6 @@ export default {
             left: randomLeft*450,
             top: randomTop*450
           });
-          // this.time = Math.floor((new Date() - startTime)/1000);
           this.time ++;
         }
         
@@ -98,44 +90,14 @@ export default {
     'hasWalletExt'
   ]),
   mounted: function(){
-    
-    // var cnt = 0,
-    //     timer,
-    //     tempItem,
-    //     randomLeft,
-    //     randomTop;
-
-    // timer = setInterval(function(){
-    //   randomLeft = Math.random();
-    //   randomTop = Math.random();
-    //   tempItem = cnt++;
-    //   this.items.push({
-    //     value: tempItem,
-    //     left: randomLeft*450,
-    //     top: randomTop*450
-    //   });
-    //   if(cnt === 20){
-    //     clearTimeout(timer)
-    //     console.log(this.score, 'score')
-    //   }
-    // }.bind(this),1000)
       this.$store.commit('CHECK_WALLET_EXT');
       console.log(this.hasWalletExt, 'hasWalletExt')
       if(!this.hasWalletExt){
         this.maskTextValue = 'Please Install WebExtensionWallet First';
       }else{
         this.$store.commit('GET_USER_ADDRESS');
+        this.$store.dispatch('getScore');
       }
-
-      // 获取用户地址
-      // let listenerFunc = function(e) {
-      //     console.log("received by page:" + e + ", e.data:" + JSON.stringify(e.data));
-      //     if (!!e.data.data && !!e.data.data.account) {
-      //         // state.userAddrerss = e.data.data.account;
-      //     }
-      // }
-      // window.removeEventListener('message', listenerFunc);
-      // window.addEventListener('message',listenerFunc);
   }
 }
 </script>
