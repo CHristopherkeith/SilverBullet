@@ -119,11 +119,23 @@ export default {
     //     console.log(this.score, 'score')
     //   }
     // }.bind(this),1000)
-     this.$store.commit('CHECK_WALLET_EXT');
-     console.log(this.hasWalletExt, 'hasWalletExt')
-     if(!this.hasWalletExt){
+      this.$store.commit('CHECK_WALLET_EXT');
+      console.log(this.hasWalletExt, 'hasWalletExt')
+      if(!this.hasWalletExt){
         this.maskTextValue = 'Please Install WebExtensionWallet First';
-     }
+      }else{
+        this.$store.commit('GET_USER_ADDRESS');
+      }
+
+      // 获取用户地址
+      // let listenerFunc = function(e) {
+      //     console.log("received by page:" + e + ", e.data:" + JSON.stringify(e.data));
+      //     if (!!e.data.data && !!e.data.data.account) {
+      //         // state.userAddrerss = e.data.data.account;
+      //     }
+      // }
+      // window.removeEventListener('message', listenerFunc);
+      // window.addEventListener('message',listenerFunc);
   }
 }
 </script>

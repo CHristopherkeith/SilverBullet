@@ -1,6 +1,8 @@
 <template>
   <div class="exactAimingMask" v-show="maskShow">
     <p class="instructions">
+      userAddress: <span>{{userAddress}}</span>
+      <br>
       Game duration: <span>{{duration}}</span> sec.
       <br>
       Hit: <span>+300</span> pts
@@ -28,6 +30,7 @@ export default {
   // mapState方式
   computed: mapState({
     hasWalletExt: state => state.hasWalletExt,
+    userAddress: state => state.userAddress,
     alertClsValue(state){
       return !state.hasWalletExt;
     }
@@ -43,10 +46,10 @@ export default {
   // },
   methods: {
     triggerStart(){
-      // console.log(this.hasWalletExt, 'this.$store.hasWalletExt')
       if(this.hasWalletExt){
-        this.$emit('update:maskShow', false);
-        this.$emit('trigger:exactAimingStart');
+        // this.$emit('update:maskShow', false);
+        // this.$emit('trigger:exactAimingStart');
+        // this.$store.commit('GET_USER_ADDRESS');
       }else{
         alert('Please Install WebExtensionWallet First');
       }
@@ -81,7 +84,6 @@ export default {
     position: absolute;
     /*background-color: white;*/
     width: 155px;
-    height: 68px;
     top: 5px;
     left: 5px;
     font-size: 13px;

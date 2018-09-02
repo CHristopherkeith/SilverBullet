@@ -1,5 +1,11 @@
 <template>
   <div class="recordBoard">
+    <!-- <ul class="recordBoardScore">
+      <li class="recordBoardTitle">
+        <span>Address</span>
+        <span class="totalScore">{{userAddress}}</span>
+      </li>
+    </ul> -->
     <ul class="recordBoardScore">
       <li class="recordBoardTitle">
         <span>Score</span>
@@ -120,6 +126,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'RecordBoard',
   // components: {TheTarget},
@@ -131,9 +138,9 @@ export default {
   methods: {
 
   },
-  // computed: mapState([
-  //   'score',
-  // ]),
+  computed: mapState([
+    'userAddress',
+  ]),
 }
 </script>
 
