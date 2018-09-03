@@ -8,9 +8,9 @@ import { mapMutations } from 'vuex'
 import NebPay from 'nebpay.js'
 import Nebulas from 'nebulas'
 
-const ContractAddress = 'nXXX'
-const Neb = new Nebulas.Neb()
-Neb.setRequest(new HttpRequest("https://testnet.nebulas.io"));
+const ContractAddress = 'nXXX';
+const Neb = new Nebulas.Neb();
+Neb.setRequest(new Nebulas.HttpRequest("https://testnet.nebulas.io"));
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

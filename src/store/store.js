@@ -1,6 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import * as types from "./type.js"
+import NebPay from 'nebpay.js'
+import Nebulas from 'nebulas'
+
+const contractAddress = 'nXXX';
+const neb = new Nebulas.Neb();
+neb.setRequest(new Nebulas.HttpRequest("https://testnet.nebulas.io"));
+neb.setRequest(new Nebulas.HttpRequest("https://mainnet.nebulas.io"));
+
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -25,6 +33,7 @@ const store = new Vuex.Store({
 		},
 		[types.GET_USER_ADDRESS](state,payload){
 			// console.log("********* get account ************")
+			// console.log(this, 'this23333')
 		    window.postMessage({
 		        "target": "contentscript",
 		        "data":{
@@ -41,15 +50,15 @@ const store = new Vuex.Store({
 		}
 	},
 	actions: {
-		getScore({commit, state }){
+		getScore({commit, state}){
 			return new Promise((resolve, reject) => {
-				Neb.api.getAccountState(/*state.userAddress*/'n1JLrc9qXkGY7WS5UiZoXPvPbz177Wew5ta')
+				neb.api.getAccountState(/*state.userAddress*/'n1NgXVjAfGABv7BJnH6BC65jTkdPv4TVet1')
 				.then(
 					res => {
 						console.log(res, '【res】')
 					},
 					err => {
-
+						console.log(err, '【err】')
 					}
 				)
 			})
