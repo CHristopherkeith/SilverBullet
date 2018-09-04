@@ -95,8 +95,15 @@ export default {
       if(!this.hasWalletExt){
         this.maskTextValue = 'Please Install WebExtensionWallet First';
       }else{
-        this.$store.commit('GET_USER_ADDRESS');
-        this.$store.dispatch('getScore');
+        this.$store.dispatch('GET_USER_ADDRESS');
+        // this.$store.dispatch('GET_STORE').then(
+        //   res => {
+        //     console.log(res,'111111111111')
+        //   },
+        //   err=>{
+        //     console.log(err,'111111111111')
+        //   }
+        // );
       }
   }
 }
