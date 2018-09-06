@@ -47,53 +47,81 @@ const store = new Vuex.Store({
 		    }, "*");
 		    let listenerFunc = function(e) {
 			    if (!!e.data.data && !!e.data.data.account) {
-			        // state.userAddress = e.data.data.account;
 			        commit('SET_USER_ADDRESS', {
 			        	userAddress: e.data.data.account
 			        });
-			        dispatch('GET_STORE').then(
-			          res => {
-			            console.log(res,'111111111111')
-			            neb.api.call({
-			            	chainID,
-			            	from: state.userAddress,
-			            	to: contractAddress,
-			            	value: 0,
-			            	nonce: parseInt(res.nonce) + 1,
-			            	gasPrice: 1000000,
-						   	gasLimit: 2000000,
-						   	contract: {
-						       function: "balanceOf",
-						       args: "[0]"
-						   }
-			            }).then(
-			            	res => {
-			            		let result = JSON.parse(res.result || res);
-			            		console.log(result, '【result】')
+			        /********************************************/ 
+			        // 链式写法：多个then放在GET_ACCOUNT_STATE【内】
+			        /********************************************/ 
+			        // dispatch('GET_ACCOUNT_STATE').then(
+			        //   res => {console.log(res,'【res】')},
+			        //   err=>{console.log(err,'【err】');}
+			        // );
 
-			            	}
-			            )
-			          },
-			          err=>{
-			            console.log(err,'2222222222')
-			          }
-			        );
+			        /********************************************/ 
+			        // 链式写法：多个then放在GET_ACCOUNT_STATE【外】
+			        /********************************************/ 
+			        dispatch('GET_ACCOUNT_STATE').then(
+			          res => {return dispatch('GET_STORE', res)},
+			          err=>{console.log(err,'【err1】');}
+			        ).then(
+			          res => {console.log(res,'【res】');},
+			          err=>{console.log(err,'【err2】');}
+			        )
 			    }
 			}
 		    window.removeEventListener('message', listenerFunc);
 		    window.addEventListener('message',listenerFunc);
 		},
-		[types.GET_STORE]({commit, state}){
+		[types.GET_ACCOUNT_STATE]({commit, state, dispatch}){
+			/********************************************/ 
+	        // 链式写法：多个then放在GET_ACCOUNT_STATE【内】
+	        /********************************************/ 
+			// return new Promise((resolve, reject) => {
+			// 	neb.api.getAccountState(state.userAddress)
+			// 	.then(
+			// 		res => {return dispatch('GET_STORE', res)},
+			// 		err => {reject(err);}
+			// 	).then(
+			// 		res => {resolve(res);},
+			// 		err => {reject(err);}
+			// 	)
+			// })
+
+			/********************************************/ 
+	        // 链式写法：多个then放在GET_ACCOUNT_STATE【外】
+	        /********************************************/ 
 			return new Promise((resolve, reject) => {
-				neb.api.getAccountState(state.userAddress/*'n1NgXVjAfGABv7BJnH6BC65jTkdPv4TVet1'*/)
+				neb.api.getAccountState('state.userAddress')
 				.then(
-					res => {
-						resolve(res);
-					},
-					err => {
+					res => {resolve(res)},
+					err => {reject(err);}
+				)
+			})
+		},
+		[types.GET_STORE]({commit, state}, res){
+			return new Promise((resolve, reject) => {
+				neb.api.call({
+	            	chainID,
+	            	from: state.userAddress,
+	            	to: contractAddress,
+	            	value: 0,
+	            	nonce: parseInt(res.nonce) + 1,
+	            	gasPrice: 1000000,
+				   	gasLimit: 2000000,
+				   	contract: {
+				       function: "balanceOf",
+				       args: "[0]"
+				   }
+	            }).then(
+	            	res => {
+	            		let result = JSON.parse(res.result || res);
+	            		resolve(result);
+	            	},
+	            	err => {
 						reject(err);
 					}
-				)
+	            )
 			})
 		}
 	}
