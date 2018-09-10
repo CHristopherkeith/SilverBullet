@@ -70,7 +70,7 @@ const store = new Vuex.Store({
 			          res => {return dispatch('GET_STORE', res)},
 			          err=>{console.log(err,'【err1】');}
 			        ).then(
-			          res => {console.log(res,'【res】');},
+			          res => {console.log(res,'【res2】');},
 			          err=>{console.log(err,'【err2】');}
 			        )
 			    }
@@ -106,78 +106,83 @@ const store = new Vuex.Store({
 		},
 		[types.GET_STORE]({commit, state}, res){
 			// 使用call方法（不花费手续费）
-			// return new Promise((resolve, reject) => {
-			// 	neb.api.call({
-	  //           	chainID,
-	  //           	from: state.userAddress,
-	  //           	to: contractAddress,
-	  //           	value: 0,
-	  //           	nonce: parseInt(res.nonce) + 1,
-	  //           	gasPrice: 1000000,
-			// 	   	gasLimit: 2000000,
-			// 	   	contract: {
-			// 	       function: "balanceOf",
-			// 	       args: "[0]"
-			// 	   }
-	  //           }).then(
-	  //           	res => {
-	  //           		let result = JSON.parse(res.result || res);
-	  //           		resolve(result);
-	  //           	},
-	  //           	err => {
-			// 			reject(err);
-			// 		}
-	  //           )
-			// })
+			return new Promise((resolve, reject) => {
+				neb.api.call({
+	            	chainID,
+	            	from: state.userAddress,
+	            	to: contractAddress,
+	            	value: 0,
+	            	nonce: parseInt(res.nonce) + 1,
+	            	gasPrice: 1000000,
+				   	gasLimit: 2000000,
+				   	contract: {
+				       function: "balanceOf",
+				       args: "[0]"
+				   }
+	            }).then(
+	            	res => {
+	            		let result = JSON.parse(res.result || res);
+	            		resolve(result);
+	            	},
+	            	err => {
+						reject(err);
+					}
+	            )
+			})
 
 			// 使用直接向合约发送数据的方法（花费手续费）
-			let param = 0;
-			let callRes = nebPay.call(contractAddress, 0, 'balanceOf', `[${param}]`, {
-				qrcode: {
-	                showQRCode: false
-	            },
-	   //          extension: {
-				// 	openExtension: true //是否支持插件调用
-				// },
-	            callback: NebPay.config.testnetUrl,
-	            listener: function(serialNumber, result){
-	            	console.log(serialNumber, '【serialNumber】')
-	            	console.log(result, '【result】')
+			// return new Promise( (resolve, reject) => {
+			// 	let param = 0;
+			// 	let callRes = nebPay.call(contractAddress, 0, 'balanceOf', `[${param}]`, {
+			// 		qrcode: {
+		 //                showQRCode: false
+		 //            },
+		 //            extension: {
+			// 			openExtension: true //是否支持插件调用
+			// 		},
+		 //            callback: NebPay.config.testnetUrl,
+		 //            listener: function(serialNumber, result){
+		 //            	console.log(serialNumber, '【serialNumber】')
+		 //            	console.log(result, '【result】')
 
-	            	const intervalQuery = setInterval(function() {
-			            funcIntervalQuery();
-			        }, 5000);
+		 //            	const intervalQuery = setInterval(function() {
+			// 	            funcIntervalQuery();
+			// 	        }, 5000);
 
-	            	function funcIntervalQuery() {  
-	            		// 使用nebpay接口 
-				        // nebPay.queryPayInfo(serialNumber, {callback: NebPay.config.testnetUrl})
-			         //    .then(
-			         //    	res => {
-				        //         let respObject = JSON.parse(res)
-				        //         console.log(respObject, '【respObject111】')
-				        //         if(respObject.code === 0 && respObject.data.status === 1){                    
-				        //             clearInterval(intervalQuery)
-				        //         }
-			         //    	},
-			         //    	err => {console.log(err, '【err222】')}
-			         //    )
+		 //            	function funcIntervalQuery(){
+		 //            		// 使用nebpay接口 
+			// 		        // nebPay.queryPayInfo(serialNumber, {callback: NebPay.config.testnetUrl})
+			// 	         //    .then(
+			// 	         //    	res => {
+			// 		        //         let respObject = JSON.parse(res)
+			// 		        //         console.log(respObject, '【respObject111】')
+			// 		        //         if(respObject.code === 0 && respObject.data.status === 1){                    
+			// 		        //             clearInterval(intervalQuery)
+			// 		        //         }
+			// 	         //    	},
+			// 	         //    	err => {console.log(err, '【err222】')}
+			// 	         //    )
 
-			         	// 使用nebjs接口查询
-			         	neb.api.getTransactionReceipt(result.txhash)
-			         	.then(
-			         		res => {
-			         			console.log(res)
-			         			if(res.status === 1){
-			         				console.log('clearInterval')
-			         				clearInterval(intervalQuery)
-			         			}
-			         			
-			         		},
-			         		err => {console.log(err, '【err222】')}
-			         	)
-				    }
-	            }
-			})
+			// 	         	// 使用nebjs接口查询
+			// 	         	neb.api.getTransactionReceipt(result.txhash)
+			// 	         	.then(
+			// 	         		res => {
+			// 	         			if(res.status === 1){
+			// 	         				console.log(res, '【res getTransactionReceipt】');
+			// 	         				clearInterval(intervalQuery);
+			// 	         				resolve(res);
+			// 	         			}
+			// 	         		},
+			// 	         		err => {
+			// 	         			console.log(err, '【err getTransactionReceipt】')
+			// 	         			clearInterval(intervalQuery);
+			// 	         			reject(err);
+			// 	         		}
+			// 	         	)
+			// 		    }
+		 //            }
+			// 	})
+			// })
 		}
 	}
 })
