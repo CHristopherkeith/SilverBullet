@@ -2,7 +2,15 @@
   <div class="exactaiming">
   	<div class="mainPanel">
       <span class="time" v-show="!maskShowValue">{{time}} s</span>
-      <ExactAimingMask :maskShow="maskShowValue" @update:maskShow="newValue=>maskShowValue=newValue" @trigger:exactAimingStart="exactAimingStart" :maskText="maskTextValue" :duration="durationValue"></ExactAimingMask>
+      <ExactAimingMask 
+      :maskShow="maskShowValue" 
+      @update:maskShow="newValue=>maskShowValue=newValue"
+      :confirmStatus="confirmStatusValue"
+      @update:confirmStatus="newValue=>confirmStatusValue=newValue" 
+      @trigger:exactAimingStart="exactAimingStart" 
+      :maskText="maskTextValue" 
+      :duration="durationValue"
+      ></ExactAimingMask>
       <!-- <ExactAimingMask :maskShow.sync="maskShowValue"></ExactAimingMask> -->
       <transition-group name="list-complete"
         v-on:after-enter="afterEnter">
@@ -29,6 +37,7 @@ export default {
       items: [],
     	targetAppear: false,
       maskShowValue: true,
+      confirmStatusValue: false,
       maskTextValue: 'CLICK TO START',
       time: 0,
       durationValue: 5,
@@ -69,6 +78,9 @@ export default {
             this.maskTextValue = 'PLAY AGAIN?CLICK!';
             this.time = 0;
             console.log(this.score, 'score')
+            if(this.score > this.bestValue.bestCcore){
+              this.confirmStatusValue = true;
+            }
           }.bind(this), 200)
         }else{
           this.items.push({

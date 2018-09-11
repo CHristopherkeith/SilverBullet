@@ -11,7 +11,8 @@
       <br>
       Left target: <span>-500</span> pts
     </p>
-    <p class="clickText" :class="{alertCls: alertClsValue}" @click="triggerStart">{{maskText}}</p>
+    <p class="clickText" :class="{alertCls: alertClsValue}" @click="triggerStart" v-show="!confirmStatus">{{maskText}}</p>
+    <p class="clickText" v-show="confirmStatus">NEW RECORD!SAVE?<span class="confirmRecordYes" @click="confirmRecord(true)">YES</span>/<span class="confirmRecordNo" @click="confirmRecord(false)">NO</span></p>
   </div>
 </template>
 
@@ -21,7 +22,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'ExactAimingMask',
   // components: {TheTarget},
-  props: ['maskShow', 'maskText', 'duration'],
+  props: ['maskShow', 'maskText', 'duration', 'confirmStatus'],
   data () {
     return {
       // alertClsValue: false
@@ -47,13 +48,20 @@ export default {
   methods: {
     triggerStart(){
       if(this.hasWalletExt){
-        // this.$emit('update:maskShow', false);
-        // this.$emit('trigger:exactAimingStart');
-        // this.$store.commit('GET_USER_ADDRESS');
+        this.$emit('update:maskShow', false);
+        this.$emit('trigger:exactAimingStart');
+        this.$store.commit('GET_USER_ADDRESS');
       }else{
         alert('Please Install WebExtensionWallet First');
       }
-      
+    },
+    confirmRecord(confirmFlag){
+      if(confirmFlag){
+        console.log('上传数据');
+        this.$emit('update:confirmStatus', false);
+      }else{
+        this.$emit('update:confirmStatus', false);
+      }
     }
   },
   // computed: mapState([
@@ -73,9 +81,18 @@ export default {
     cursor: pointer;
     color: #79B6E8;
     text-align: center;
-    line-height: 500px;
+    /*line-height: 500px;*/
     user-select: none;
     letter-spacing: 5px;
+    position: absolute;
+    margin: auto;
+    padding: auto;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    width: 100%;
+    height: 20px;
   }
   .alertCls{
     color: red !important;
@@ -93,5 +110,20 @@ export default {
   .exactAimingMask>p.instructions>span{
     color: white;
     /*font-weight: bolder;*/
+  }
+  .confirmRecordYes{
+    font-size: 30px;
+    font-weight: bolder;
+    transition:all 0.5s;
+  }
+  .confirmRecordYes:hover{
+    color: #ffffff;
+  }
+  .confirmRecordNo{
+    font-weight: bolder;
+    transition:all 0.5s;
+  }
+  .confirmRecordNo:hover{
+    color: gray;
   }
 </style>

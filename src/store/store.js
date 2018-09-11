@@ -25,7 +25,7 @@ const store = new Vuex.Store({
 	},
 	mutations: {
 		[types.ADD_SCORE](state,payload){
-			state.score = state.score + 1;
+			state.score = state.score + 300;
 		},
 		[types.CLEAR_SCORE](state,payload){
 			state.score = 0;
