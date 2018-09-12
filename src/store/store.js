@@ -183,6 +183,39 @@ const store = new Vuex.Store({
 		 //            }
 			// 	})
 			// })
+		},
+		[types.SAVE_STORE]({commit}, payload={value: 0, type: 'exact'}){
+			let value = payload.value;
+			let type = payload.type;
+			return new Promise((resolve, reject) =>{
+				nebPay.call(contractAddress, 0, 'saveScore', `[${value}, ${type}]`, {
+					qrcode: {showQRCode: false},
+					extension: {openExtension: true},
+					callback: NebPay.config.testnetUrl,
+					listener: (serialNumber, result)=>{
+						const intervalQuery = setInterval(()=>{
+							funcIntervalQuery();
+						}, 2000)
+						function funcIntervalQuery(){
+							neb.api.getTransactionReceipt(result.txhash)
+							.then(
+								res => {
+									if(res.status === 1 || res.status === 0){
+										console.log(res, '【res getTransactionReceipt】');
+										clearInterval(intervalQuery);
+										resolve(res);
+									}
+								},
+								err => {
+									console.log(err, '【err getTransactionReceipt】')
+									clearInterval(intervalQuery);
+									reject(err);
+								}
+							)
+						}
+					}
+				})
+			})
 		}
 	}
 })

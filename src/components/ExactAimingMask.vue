@@ -58,6 +58,19 @@ export default {
     confirmRecord(confirmFlag){
       if(confirmFlag){
         console.log('上传数据');
+        this.$store.dispatch('SAVE_STORE').then(
+          res => {
+            console.log(res, '【res confirmRecord】')
+            if(res.status === 1){
+              console.log('【success】')
+            }else{
+              console.log('【fail】')
+            }
+          },
+          err => {
+            console.log(err, '【err confirmRecord】')
+          }
+        )
         this.$emit('update:confirmStatus', false);
       }else{
         this.$emit('update:confirmStatus', false);
