@@ -8,7 +8,8 @@ NebPay.config = {
 	testnetUrl: "https://testnet.nebulas.io",
 	mainnetUrl: "https://mainnet.nebulas.io"
 }
-const contractAddress = 'n21Rvxijhp9u8ubkWYotFPDnWLfGnpWgXSy';
+// const contractAddress = 'n21Rvxijhp9u8ubkWYotFPDnWLfGnpWgXSy';
+const contractAddress = 'n1mhwrNzZgrFDUTKJAZjhMD71DBRMeWDu9J';
 const neb = new Nebulas.Neb();
 const chainID = 1001;
 const nebPay = new NebPay();
@@ -116,7 +117,8 @@ const store = new Vuex.Store({
 	            	gasPrice: 1000000,
 				   	gasLimit: 2000000,
 				   	contract: {
-				       function: "balanceOf",
+				       // function: "balanceOf",
+				       function: "getScore",
 				       args: "[0]"
 				   }
 	            }).then(
