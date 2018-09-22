@@ -50,7 +50,7 @@ export default {
       if(this.hasWalletExt){
         this.$emit('update:maskShow', false);
         this.$emit('trigger:exactAimingStart');
-        this.$store.commit('GET_USER_ADDRESS');
+        // this.$store.commit('GET_USER_ADDRESS');
       }else{
         alert('Please Install WebExtensionWallet First');
       }
@@ -58,7 +58,15 @@ export default {
     confirmRecord(confirmFlag){
       if(confirmFlag){
         console.log('上传数据');
-        this.$store.dispatch('SAVE_STORE').then(
+        this.$store.dispatch('SAVE_STORE', {
+          value: JSON.stringify({
+            score: 0,
+            misses: 0,
+            missesTgt: 0
+          }), 
+          type: 'exact'
+        })
+        .then(
           res => {
             console.log(res, '【res confirmRecord】')
             if(res.status === 1){

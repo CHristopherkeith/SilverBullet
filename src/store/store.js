@@ -187,10 +187,19 @@ const store = new Vuex.Store({
 			// })
 		},
 		[types.SAVE_STORE]({commit}, payload={value: 0, type: 'exact'}){
+			console.log(payload, '【payload】')
 			let value = payload.value;
 			let type = payload.type;
+			// let valueArgs = `["${value}", "${type}"]`;
+			// let valueArgsStr = '["'+value+'","'+type+'"]';
+			// let valueArgsArr = [value, type];
+			// let valueArgsStr = 
+
+			// console.log(valueArgs, '【valueArgs】')
+			// console.log(valueArgsStr, '【valueArgsStr】')
+			// console.log(JSON.stringify(valueArgsStr), '【valueArgsStr】')
 			return new Promise((resolve, reject) =>{
-				nebPay.call(contractAddress, 0, 'saveScore', `[${value}, ${type}]`, {
+				nebPay.call(contractAddress, 0, 'saveScore',JSON.stringify([value, type])/*'[\"{\"score\": \"0\",\"misses\": \"0\",\"missesTgt\": \"0\"}\",\"exact\"]'*//*'["{\\"score\\": 0}"]'*/, {
 					qrcode: {showQRCode: false},
 					extension: {openExtension: true},
 					callback: NebPay.config.testnetUrl,
