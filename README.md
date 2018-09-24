@@ -43,9 +43,8 @@
 ## 三、智能合约  
 1.智能合约采用星云链作为部署公链，合约代码见contract文件夹 
 1.1.合约地址（测试网已部署）
-n1mhwrNzZgrFDUTKJAZjhMD71DBRMeWDu9J
+n1jT2w44HcCUtWrR8RxVuwVpk89KhN15GUC  
 1.2.部署txhash
-f444f5cebd6bd99c745aeaef839b0e493e4733b46509e2ada4d28195b542a81d
 2.智能合约设计：  
 2.1.合约数据结构  
 2.1.1.计分对象  
