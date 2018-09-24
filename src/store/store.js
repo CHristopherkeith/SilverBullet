@@ -9,7 +9,8 @@ NebPay.config = {
 	mainnetUrl: "https://mainnet.nebulas.io"
 }
 // const contractAddress = 'n21Rvxijhp9u8ubkWYotFPDnWLfGnpWgXSy';
-const contractAddress = 'n1mhwrNzZgrFDUTKJAZjhMD71DBRMeWDu9J';
+// const contractAddress = 'n1mhwrNzZgrFDUTKJAZjhMD71DBRMeWDu9J';
+const contractAddress = 'n1jT2w44HcCUtWrR8RxVuwVpk89KhN15GUC';
 const neb = new Nebulas.Neb();
 const chainID = 1001;
 const nebPay = new NebPay();
@@ -68,7 +69,7 @@ const store = new Vuex.Store({
 			        // 链式写法：多个then放在GET_ACCOUNT_STATE【外】
 			        /********************************************/ 
 			        dispatch('GET_ACCOUNT_STATE').then(
-			          res => {return dispatch('GET_STORE', res)},
+			          res => {dispatch('FOR_EACH', res);dispatch('GET_NUM_OF_PLAYER', res);return dispatch('GET_STORE', res)},
 			          err=>{console.log(err,'【err1】');}
 			        ).then(
 			          res => {console.log(res,'【res2】');},
@@ -186,9 +187,14 @@ const store = new Vuex.Store({
 			// 	})
 			// })
 		},
-		[types.SAVE_STORE]({commit}, payload={value: 0, type: 'exact'}){
+		[types.SAVE_STORE]({commit, state}, payload={type: 'exact'}){
 			console.log(payload, '【payload】')
-			let value = payload.value;
+			// let value = payload.value;
+			let value = JSON.stringify({
+				score: state.score,
+	            misses: 0,
+	            missesTgt: 0
+			});
 			let type = payload.type;
 			// let valueArgs = `["${value}", "${type}"]`;
 			// let valueArgsStr = '["'+value+'","'+type+'"]';
@@ -226,6 +232,60 @@ const store = new Vuex.Store({
 						}
 					}
 				})
+			})
+		},
+		[types.GET_NUM_OF_PLAYER]({commit, state}, payload){
+			return new Promise((resolve, reject)=>{
+				neb.api.call({
+	            	chainID,
+	            	from: state.userAddress,
+	            	to: contractAddress,
+	            	value: 0,
+	            	nonce: parseInt(payload.nonce) + 1,
+	            	gasPrice: 1000000,
+				   	gasLimit: 2000000,
+				   	contract: {
+				       function: "getDataSize",
+				       args: "[0]"
+				   }
+	            }).then(
+	            	res => {
+	            		// let result = JSON.parse(res.result || res);
+	            		console.log(res, '【GET_NUM_OF_PLAYER res】')
+	            		resolve(res);
+	            	},
+	            	err => {
+	            		console.log(err, '【GET_NUM_OF_PLAYER err】')
+						reject(err);
+					}
+	            )
+			})
+		},
+		[types.FOR_EACH]({commit, state}, payload){
+			return new Promise((resolve, reject) => {
+				neb.api.call({
+	            	chainID,
+	            	from: state.userAddress,
+	            	to: contractAddress,
+	            	value: 0,
+	            	nonce: parseInt(payload.nonce) + 1,
+	            	gasPrice: 1000000,
+				   	gasLimit: 2000000,
+				   	contract: {
+				       function: "forEach",
+				       args: "[10, 0]"
+				   }
+	            }).then(
+	            	res => {
+	            		// let result = JSON.parse(res.result || res);
+	            		console.log(res, '【FOR_EACH res】')
+	            		resolve(res);
+	            	},
+	            	err => {
+	            		console.log(err, '【FOR_EACH err】')
+						reject(err);
+					}
+	            )
 			})
 		}
 	}

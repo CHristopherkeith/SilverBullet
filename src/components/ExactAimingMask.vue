@@ -59,11 +59,11 @@ export default {
       if(confirmFlag){
         console.log('上传数据');
         this.$store.dispatch('SAVE_STORE', {
-          value: JSON.stringify({
-            score: 0,
-            misses: 0,
-            missesTgt: 0
-          }), 
+          // value: JSON.stringify({
+          //   score: 0,
+          //   misses: 0,
+          //   missesTgt: 0
+          // }), 
           type: 'exact'
         })
         .then(

@@ -3,12 +3,12 @@
 var ScoreContent = function(text){
 	if(text){
 		var o = JSON.parse(text);
-		this.exactScore = new BigNumber(o.exactScore);
-    	this.exactMisses = new BigNumber(o.exactMisses);
-    	this.exactMissesTgt = new BigNumber(o.exactMissesTgt);
-    	this.pressScore = new BigNumber(o.pressScore);
-    	this.pressMisses = new BigNumber(o.pressMisses);
-    	this.pressMissesTgt = new BigNumber(o.pressMissesTgt);
+		this.exactScore = new BigNumber(o.exactScore || 0);
+    	this.exactMisses = new BigNumber(o.exactMisses || 0);
+    	this.exactMissesTgt = new BigNumber(o.exactMissesTgt || 0);
+    	this.pressScore = new BigNumber(o.pressScore || 0);
+    	this.pressMisses = new BigNumber(o.pressMisses || 0);
+    	this.pressMissesTgt = new BigNumber(o.pressMissesTgt || 0);
 	}else{
 		this.exactScore = null;
     	this.exactMisses = null;
@@ -45,6 +45,7 @@ SilverBulletContract.prototype = {
 		this.size = 0;
 	},
 
+	// ok
 	saveScore: function(value, type){
 		var score, misses, missesTgt, newScoreContent;
 		var index = this.size;
@@ -76,6 +77,7 @@ SilverBulletContract.prototype = {
 		this.silverBullet.set(from, newScoreContent);
 	},
 
+	// ok
 	getScore: function(){
 		var from = Blockchain.transaction.from;
 		return this.silverBullet.get(from);
@@ -85,10 +87,12 @@ SilverBulletContract.prototype = {
 		return this.numOfPlayers;
 	},
 
+	// ok
 	getDataSize: function(){
 		return this.size;
 	},
 
+	// ok
 	forEach: function(limit, offset){
         limit = parseInt(limit);
         offset = parseInt(offset);
@@ -109,6 +113,7 @@ SilverBulletContract.prototype = {
         return result;
     },
 
+    // ok
 	verifyAddress: function(address){
 		// 1-valid, 0-invalid
 		var result = Blockchain.verifyAddress(address);
