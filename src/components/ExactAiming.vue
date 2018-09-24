@@ -18,7 +18,7 @@
       </transition-group>
   	</div>
     <div class="scorePanel">
-      <RecordBoard :score="score" :best="bestValue"></RecordBoard>
+      <RecordBoard :score="score"></RecordBoard>
     </div>
   </div>
 </template>
@@ -41,12 +41,12 @@ export default {
       maskTextValue: 'CLICK TO START',
       time: 0,
       durationValue: 5,
-      bestValue: {
-        bestCcore: 0,
-        bestHits: 0,
-        bestMisses: 0,
-        bestMissesTgt: 0
-      }
+      // bestValue: {
+      //   bestCcore: 0,
+      //   bestHits: 0,
+      //   bestMisses: 0,
+      //   bestMissesTgt: 0
+      // }
     }
   },
   methods: {
@@ -78,7 +78,7 @@ export default {
             this.maskTextValue = 'PLAY AGAIN?CLICK!';
             this.time = 0;
             console.log(this.score, 'score')
-            if(this.score > this.bestValue.bestCcore){
+            if(this.score > this.best.exactScore){
               this.confirmStatusValue = true;
             }
           }.bind(this), 200)
@@ -99,6 +99,7 @@ export default {
   },
   computed: mapState([
     'score',
+    'best',
     'hasWalletExt'
   ]),
   mounted: function(){
@@ -107,7 +108,27 @@ export default {
       if(!this.hasWalletExt){
         this.maskTextValue = 'Please Install WebExtensionWallet First';
       }else{
-        this.$store.dispatch('GET_USER_ADDRESS');
+        this.$store.dispatch('GET_USER_ADDRESS').then(
+          res => {
+            console.log(res, '【GET_USER_ADDRESS res】');
+            this.$store.commit('SET_USER_ADDRESS', res);
+            return this.$store.dispatch('GET_ACCOUNT_STATE');
+          }
+        ).then(
+          res => {
+            console.log(res, '【GET_ACCOUNT_STATE res】');
+            return this.$store.dispatch('GET_STORE', res)
+          },
+          err => {console.log(err, '【GET_ACCOUNT_STATE err】');}
+        ).then(
+          res => {
+            console.log(res, '【GET_STORE res】');
+            if(res){
+              this.$store.commit('SET_SCORE', res);
+            }
+          },
+          err => {console.log(err, '【GET_STORE err】');},
+        )
       }
   }
 }

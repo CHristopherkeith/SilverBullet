@@ -22,8 +22,18 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
 	state: {
 		score: 0,
+		misses: 0,
+		missesTgt: 0,
 		hasWalletExt: false,
-		userAddress: ''
+		userAddress: '',
+		best: {
+			exactScore: 0,
+			exactMisses: 0,
+			exactMissesTgt: 0,
+			pressScore: 0,
+			pressMisses: 0,
+			pressMissesTgt: 0,
+		}
 	},
 	mutations: {
 		[types.ADD_SCORE](state,payload){
@@ -41,63 +51,32 @@ const store = new Vuex.Store({
 		},
 		[types.SET_USER_ADDRESS](state,payload){
 			state.userAddress = payload.userAddress;
+		},
+		[types.SET_SCORE](state, payload){
+			state.best = payload;
 		}
 	},
 	actions: {
 		[types.GET_USER_ADDRESS]({commit, state, dispatch}){
-			console.log("********* get account ************")
-		    window.postMessage({
-		        "target": "contentscript",
-		        "data":{
-		        },
-		        "method": "getAccount",
-		    }, "*");
-		    let listenerFunc = function(e) {
-			    if (!!e.data.data && !!e.data.data.account) {
-			        commit('SET_USER_ADDRESS', {
-			        	userAddress: e.data.data.account
-			        });
-			        /********************************************/ 
-			        // 链式写法：多个then放在GET_ACCOUNT_STATE【内】
-			        /********************************************/ 
-			        // dispatch('GET_ACCOUNT_STATE').then(
-			        //   res => {console.log(res,'【res】')},
-			        //   err=>{console.log(err,'【err】');}
-			        // );
-
-			        /********************************************/ 
-			        // 链式写法：多个then放在GET_ACCOUNT_STATE【外】
-			        /********************************************/ 
-			        dispatch('GET_ACCOUNT_STATE').then(
-			          res => {dispatch('FOR_EACH', res);dispatch('GET_NUM_OF_PLAYER', res);return dispatch('GET_STORE', res)},
-			          err=>{console.log(err,'【err1】');}
-			        ).then(
-			          res => {console.log(res,'【res2】');},
-			          err=>{console.log(err,'【err2】');}
-			        )
-			    }
-			}
-		    window.removeEventListener('message', listenerFunc);
-		    window.addEventListener('message',listenerFunc);
+			return new Promise((resolve, reject)=>{
+				console.log("********* get account ************")
+			    window.postMessage({
+			        "target": "contentscript",
+			        "data":{
+			        },
+			        "method": "getAccount",
+			    }, "*");
+			    let listenerFunc = function(e) {
+				    if (!!e.data.data && !!e.data.data.account) {
+				        resolve({userAddress: e.data.data.account})
+				    }
+				}
+			    window.removeEventListener('message', listenerFunc);
+			    window.addEventListener('message',listenerFunc);
+			})
+			
 		},
 		[types.GET_ACCOUNT_STATE]({commit, state, dispatch}){
-			/********************************************/ 
-	        // 链式写法：多个then放在GET_ACCOUNT_STATE【内】
-	        /********************************************/ 
-			// return new Promise((resolve, reject) => {
-			// 	neb.api.getAccountState(state.userAddress)
-			// 	.then(
-			// 		res => {dispatch('GET_STORE', res)},
-			// 		err => {reject(err);}
-			// 	).then(
-			// 		res => {resolve(res);},
-			// 		err => {reject(err);}
-			// 	)
-			// })
-
-			/********************************************/ 
-	        // 链式写法：多个then放在GET_ACCOUNT_STATE【外】
-	        /********************************************/ 
 			return new Promise((resolve, reject) => {
 				neb.api.getAccountState(state.userAddress)
 				.then(
@@ -118,7 +97,6 @@ const store = new Vuex.Store({
 	            	gasPrice: 1000000,
 				   	gasLimit: 2000000,
 				   	contract: {
-				       // function: "balanceOf",
 				       function: "getScore",
 				       args: "[0]"
 				   }
@@ -191,21 +169,13 @@ const store = new Vuex.Store({
 			console.log(payload, '【payload】')
 			// let value = payload.value;
 			let value = JSON.stringify({
-				score: state.score,
-	            misses: 0,
-	            missesTgt: 0
+				score: parseInt(state.best.exactScore)+1,
+	            misses: state.misses,
+	            missesTgt: state.missesTgt
 			});
 			let type = payload.type;
-			// let valueArgs = `["${value}", "${type}"]`;
-			// let valueArgsStr = '["'+value+'","'+type+'"]';
-			// let valueArgsArr = [value, type];
-			// let valueArgsStr = 
-
-			// console.log(valueArgs, '【valueArgs】')
-			// console.log(valueArgsStr, '【valueArgsStr】')
-			// console.log(JSON.stringify(valueArgsStr), '【valueArgsStr】')
 			return new Promise((resolve, reject) =>{
-				nebPay.call(contractAddress, 0, 'saveScore',JSON.stringify([value, type])/*'[\"{\"score\": \"0\",\"misses\": \"0\",\"missesTgt\": \"0\"}\",\"exact\"]'*//*'["{\\"score\\": 0}"]'*/, {
+				nebPay.call(contractAddress, 0, 'saveScore',JSON.stringify([value, type]), {
 					qrcode: {showQRCode: false},
 					extension: {openExtension: true},
 					callback: NebPay.config.testnetUrl,

@@ -48,24 +48,24 @@
     <ul class="recordBoardBest">
       <li class="recordBoardTitle">
         <span>Best</span>
-        <span class="totalScore">{{best.bestCcore}}</span>
+        <span class="totalScore">{{best.exactScore}}</span>
       </li>
-      <li>
+      <!-- <li>
         <div class="targetCount">
           <span>Hits</span>
           <span class="targetCountRes">{{best.bestHits}}</span>
         </div>
-      </li>
+      </li> -->
       <li>
         <div class="targetCount">
           <span>Misses</span>
-          <span class="targetCountRes">{{best.bestMisses}}</span>
+          <span class="targetCountRes">{{best.exactMisses}}</span>
         </div>
       </li>
       <li>
         <div class="targetCount">
           <span>Missed targets</span>
-          <span class="targetCountRes">{{best.bestMissesTgt}}</span>
+          <span class="targetCountRes">{{best.exactMissesTgt}}</span>
         </div>
       </li>
     </ul>
@@ -130,7 +130,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'RecordBoard',
   // components: {TheTarget},
-  props: ['score', 'best'],
+  props: ['score'],
   data () {
     return {
     }
@@ -140,6 +140,7 @@ export default {
   },
   computed: mapState([
     'userAddress',
+    'best'
   ]),
 }
 </script>
