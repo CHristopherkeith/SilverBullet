@@ -11,7 +11,7 @@
       <br>
       Left target: <span>-500</span> pts
     </p>
-    <p class="clickText" :class="{alertCls: alertClsValue}" @click="triggerStart" v-show="!confirmStatus">{{maskText}}</p>
+    <p class="clickText" :class="{alertCls: alertClsValue}" @click.stop="triggerStart()" v-show="!confirmStatus">{{maskText}}</p>
     <p class="clickText" v-show="confirmStatus">NEW RECORD!SAVE?<span class="confirmRecordYes" @click="confirmRecord(true)">YES</span>/<span class="confirmRecordNo" @click="confirmRecord(false)">NO</span></p>
   </div>
 </template>
@@ -46,11 +46,12 @@ export default {
   //   }
   // },
   methods: {
-    triggerStart(){
+    triggerStart(e){
+      // e.cancelBubble = true;
+      // console.log(event)
       if(this.hasWalletExt){
         this.$emit('update:maskShow', false);
         this.$emit('trigger:exactAimingStart');
-        // this.$store.commit('GET_USER_ADDRESS');
       }else{
         alert('Please Install WebExtensionWallet First');
       }
@@ -68,7 +69,6 @@ export default {
         })
         .then(
           res => {
-            console.log(res, '【res confirmRecord】')
             if(res.status === 1){
               console.log('【success】')
             }else{

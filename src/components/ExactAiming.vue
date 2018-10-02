@@ -1,14 +1,14 @@
 <template>
   <div class="exactaiming">
-  	<div class="mainPanel">
+  	<div class="mainPanel" @click="maskClick">
       <span class="time" v-show="!maskShowValue">{{time}} s</span>
-      <ExactAimingMask 
-      :maskShow="maskShowValue" 
+      <ExactAimingMask
+      :maskShow="maskShowValue"
       @update:maskShow="newValue=>maskShowValue=newValue"
       :confirmStatus="confirmStatusValue"
       @update:confirmStatus="newValue=>confirmStatusValue=newValue" 
-      @trigger:exactAimingStart="exactAimingStart" 
-      :maskText="maskTextValue" 
+      @trigger:exactAimingStart="exactAimingStart"
+      :maskText="maskTextValue"
       :duration="durationValue"
       ></ExactAimingMask>
       <!-- <ExactAimingMask :maskShow.sync="maskShowValue"></ExactAimingMask> -->
@@ -18,7 +18,7 @@
       </transition-group>
   	</div>
     <div class="scorePanel">
-      <RecordBoard :score="score"></RecordBoard>
+      <RecordBoard :now="now"></RecordBoard>
     </div>
   </div>
 </template>
@@ -34,19 +34,17 @@ export default {
   components: {TheTarget, ExactAimingMask, RecordBoard},
   data () {
     return {
-      items: [],
+      items: [/*{
+        value: 1,
+        left: 250,
+        top: 250
+      }*/],
     	targetAppear: false,
       maskShowValue: true,
       confirmStatusValue: false,
       maskTextValue: 'CLICK TO START',
       time: 0,
       durationValue: 5,
-      // bestValue: {
-      //   bestCcore: 0,
-      //   bestHits: 0,
-      //   bestMisses: 0,
-      //   bestMissesTgt: 0
-      // }
     }
   },
   methods: {
@@ -54,12 +52,15 @@ export default {
       // this.items.splice(el.dataset.index, 1)
       if(el&&el.parentNode){
         el.parentNode.removeChild(el);
+        this.$store.commit('ADD_MISSES_TARGET');
       }
     },
     ...mapMutations({
-      addScore: 'ADD_SCORE'
+      addScore: 'ADD_SCORE',
+      maskClick: 'ADD_MISSES',
     }),
     exactAimingStart(){
+      this.$store.commit('SET_PLAYING', {playingState: true});
       this.$store.commit('CLEAR_SCORE');
       var cnt = 0,
           timer,
@@ -73,16 +74,18 @@ export default {
         tempItem = cnt++;
         if(this.time >= this.durationValue){
           setTimeout(function(){
+            this.$store.commit('SET_PLAYING', {playingState: false});
             clearTimeout(timer);
             this.maskShowValue = true;
             this.maskTextValue = 'PLAY AGAIN?CLICK!';
             this.time = 0;
-            console.log(this.score, 'score')
-            if(this.score > this.best.exactScore){
+            console.log(this.now.score, 'score')
+            if(this.now.score > this.best.exactScore){
               this.confirmStatusValue = true;
             }
-          }.bind(this), 200)
+          }.bind(this), 250)
         }else{
+          this.$store.commit('ADD_TOTAL_TARGET');
           this.items.push({
             value: tempItem,
             left: randomLeft*450,
@@ -98,7 +101,7 @@ export default {
 
   },
   computed: mapState([
-    'score',
+    'now',
     'best',
     'hasWalletExt'
   ]),
@@ -108,6 +111,7 @@ export default {
       if(!this.hasWalletExt){
         this.maskTextValue = 'Please Install WebExtensionWallet First';
       }else{
+        // return;
         this.$store.dispatch('GET_USER_ADDRESS').then(
           res => {
             console.log(res, '【GET_USER_ADDRESS res】');
@@ -179,6 +183,7 @@ export default {
     border-radius: 20px;
     position: absolute;
     cursor: crosshair;
+    z-index: 2;
   }
   .list-complete-enter-active{
     animation: fade-in 1.2s linear;

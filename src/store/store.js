@@ -21,9 +21,17 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		score: 0,
-		misses: 0,
-		missesTgt: 0,
+		// score: 0,
+		// misses: 0,
+		// missesTgt: 0,
+		playing: false,
+		now: {
+			score: 0,
+			hits: 0,
+			misses: 0,
+			missesTgt: 0,
+			totalTarget: 0
+		},
 		hasWalletExt: false,
 		userAddress: '',
 		best: {
@@ -37,10 +45,19 @@ const store = new Vuex.Store({
 	},
 	mutations: {
 		[types.ADD_SCORE](state,payload){
-			state.score = state.score + 300;
+			if(state.playing){
+				state.now.score += 300;
+				state.now.hits += 1;
+			}
 		},
 		[types.CLEAR_SCORE](state,payload){
-			state.score = 0;
+			state.now = {
+				score: 0,
+				hits: 0,
+				misses: 0,
+				missesTgt: 0,
+				totalTarget: 0
+			};
 		},
 		[types.CHECK_WALLET_EXT](state,payload){
 			if(typeof(webExtensionWallet) === "undefined"){
@@ -54,7 +71,27 @@ const store = new Vuex.Store({
 		},
 		[types.SET_SCORE](state, payload){
 			state.best = payload;
-		}
+		},
+		[types.ADD_MISSES](state,payload){
+			if(state.playing){
+				state.now.misses += 1;
+			}
+		},
+		[types.ADD_TOTAL_TARGET](state,payload){
+			if(state.playing){
+				state.now.totalTarget += 1;
+			}
+		},
+		[types.ADD_MISSES_TARGET](state,payload){
+			if(state.playing){
+				state.now.missesTgt += 1;
+			}
+		},
+		[types.SET_PLAYING](state,payload){
+			state.playing = payload.playingState;
+		},
+
+
 	},
 	actions: {
 		[types.GET_USER_ADDRESS]({commit, state, dispatch}){
@@ -170,8 +207,8 @@ const store = new Vuex.Store({
 			// let value = payload.value;
 			let value = JSON.stringify({
 				score: parseInt(state.best.exactScore)+1,
-	            misses: state.misses,
-	            missesTgt: state.missesTgt
+	            misses: state.now.misses,
+	            missesTgt: state.now.missesTgt
 			});
 			let type = payload.type;
 			return new Promise((resolve, reject) =>{

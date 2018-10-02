@@ -9,12 +9,12 @@
     <ul class="recordBoardScore">
       <li class="recordBoardTitle">
         <span>Score</span>
-        <span class="totalScore">{{score}}</span>
+        <span class="totalScore">{{now.score}}</span>
       </li>
       <li>
         <div class="targetCount">
           <span>Hits</span>
-          <span class="targetCountRes">0</span>
+          <span class="targetCountRes">{{now.hits}}</span>
         </div>
         <div class="scoreCount">
           <span>0</span>
@@ -23,7 +23,7 @@
       <li>
         <div class="targetCount">
           <span>Misses</span>
-          <span class="targetCountRes">0</span>
+          <span class="targetCountRes">{{now.misses}}</span>
         </div>
         <div class="scoreCount">
           <span>0</span>
@@ -32,7 +32,7 @@
       <li>
         <div class="targetCount">
           <span>Missed targets</span>
-          <span class="targetCountRes">0</span>
+          <span class="targetCountRes">{{now.missesTgt}}</span>
         </div>
         <div class="scoreCount">
           <span>0</span>
@@ -41,7 +41,7 @@
       <li>
         <div class="targetCount">
           <span>Total targets</span>
-          <span class="targetCountRes">0</span>
+          <span class="targetCountRes">{{now.totalTarget}}</span>
         </div>
       </li>
     </ul>
@@ -130,7 +130,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'RecordBoard',
   // components: {TheTarget},
-  props: ['score'],
+  props: ['now'],
   data () {
     return {
     }

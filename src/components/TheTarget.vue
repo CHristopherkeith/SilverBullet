@@ -1,5 +1,5 @@
 <template>
-  <div class="thetarget" @click="clickTarget" :style="{left: left+'px', top: top+'px'}">
+  <div class="thetarget" @click.stop="clickTarget" :style="{left: left+'px', top: top+'px'}">
   </div>
 </template>
 
@@ -12,7 +12,7 @@ export default {
     }
   },
   methods: {
-    clickTarget(){
+    clickTarget(e){
       this.$el.parentNode.removeChild(this.$el);
       this.$emit('addScore')
     }
