@@ -5,11 +5,11 @@
       <br>
       Game duration: <span>{{duration}}</span> sec.
       <br>
-      Hit: <span>+300</span> pts
+      Hit: <span>{{hitsPoint > 0 ? `+${hitsPoint}` : hitsPoint}}</span> pts
       <br>
-      Miss: <span>-100</span> pts
+      Miss: <span>{{missesPoint > 0 ? `+${missesPoint}` : missesPoint}}</span> pts
       <br>
-      Left target: <span>-500</span> pts
+      Left target: <span>{{missesTgtPoint > 0 ? `+${missesTgtPoint}` : missesTgtPoint}}</span> pts
     </p>
     <p class="clickText" :class="{alertCls: alertClsValue}" @click.stop="triggerStart()" v-show="!confirmStatus">{{maskText}}</p>
     <p class="clickText" v-show="confirmStatus">NEW RECORD!SAVE?<span class="confirmRecordYes" @click="confirmRecord(true)">YES</span>/<span class="confirmRecordNo" @click="confirmRecord(false)">NO</span></p>
@@ -29,22 +29,29 @@ export default {
     }
   },
   // mapState方式
-  computed: mapState({
-    hasWalletExt: state => state.hasWalletExt,
-    userAddress: state => state.userAddress,
-    alertClsValue(state){
-      return !state.hasWalletExt;
-    }
-  }),
-  // 混入方式
-  // computed: {
-  //   ...mapState([
-  //     'hasWalletExt'
-  //   ]),
-  //   alertClsValue(){
-  //     return !this.$store.state.hasWalletExt;
+  // computed: mapState({
+  //   hasWalletExt: state => state.hasWalletExt,
+  //   userAddress: state => state.userAddress,
+  //   alertClsValue(state){
+  //     return !state.hasWalletExt;
   //   }
-  // },
+  // }),
+  // 混入方式
+  computed: {
+    ...mapState([
+      'hasWalletExt',
+      'userAddress',
+      'hitsPoint',
+      'missesPoint',
+      'missesTgtPoint'
+    ]),
+    // ...mapState({
+    //   'userAddress1': 'userAddress',
+    // }),
+    alertClsValue(){
+      return !this.$store.state.hasWalletExt;
+    }
+  },
   methods: {
     triggerStart(e){
       // e.cancelBubble = true;

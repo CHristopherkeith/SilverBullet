@@ -1,4 +1,6 @@
 export const ADD_SCORE = 'ADD_SCORE'
+export const CHANGE_SCORE = 'CHANGE_SCORE'
+export const ADD_HITS = 'ADD_HITS'
 export const CLEAR_SCORE = 'CLEAR_SCORE'
 export const CHECK_WALLET_EXT = 'CHECK_WALLET_EXT'
 export const GET_USER_ADDRESS = 'GET_USER_ADDRESS'

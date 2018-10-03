@@ -21,9 +21,9 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		// score: 0,
-		// misses: 0,
-		// missesTgt: 0,
+		hitsPoint: 300,
+		missesPoint: -100,
+		missesTgtPoint: -300,
 		playing: false,
 		now: {
 			score: 0,
@@ -44,10 +44,13 @@ const store = new Vuex.Store({
 		}
 	},
 	mutations: {
-		[types.ADD_SCORE](state,payload){
+		[types.CHANGE_SCORE](state,payload){
+			state.now.score = state.now.hits * state.hitsPoint + state.now.misses * state.missesPoint + state.now.missesTgt * state.missesTgtPoint;
+		},
+		[types.ADD_HITS](state,payload){
 			if(state.playing){
-				state.now.score += 300;
 				state.now.hits += 1;
+				this.commit('CHANGE_SCORE');
 			}
 		},
 		[types.CLEAR_SCORE](state,payload){
@@ -75,6 +78,7 @@ const store = new Vuex.Store({
 		[types.ADD_MISSES](state,payload){
 			if(state.playing){
 				state.now.misses += 1;
+				this.commit('CHANGE_SCORE');
 			}
 		},
 		[types.ADD_TOTAL_TARGET](state,payload){
@@ -85,6 +89,7 @@ const store = new Vuex.Store({
 		[types.ADD_MISSES_TARGET](state,payload){
 			if(state.playing){
 				state.now.missesTgt += 1;
+				this.commit('CHANGE_SCORE');
 			}
 		},
 		[types.SET_PLAYING](state,payload){
@@ -206,7 +211,8 @@ const store = new Vuex.Store({
 			console.log(payload, '【payload】')
 			// let value = payload.value;
 			let value = JSON.stringify({
-				score: parseInt(state.best.exactScore)+1,
+				// score: parseInt(state.best.exactScore)+1,
+				score:  state.now.score,
 	            misses: state.now.misses,
 	            missesTgt: state.now.missesTgt
 			});

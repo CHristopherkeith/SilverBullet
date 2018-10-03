@@ -44,7 +44,7 @@ export default {
       confirmStatusValue: false,
       maskTextValue: 'CLICK TO START',
       time: 0,
-      durationValue: 5,
+      durationValue: 10,
     }
   },
   methods: {
@@ -56,7 +56,7 @@ export default {
       }
     },
     ...mapMutations({
-      addScore: 'ADD_SCORE',
+      addScore: 'ADD_HITS',
       maskClick: 'ADD_MISSES',
     }),
     exactAimingStart(){
@@ -83,7 +83,7 @@ export default {
             if(this.now.score > this.best.exactScore){
               this.confirmStatusValue = true;
             }
-          }.bind(this), 250)
+          }.bind(this), 350)
         }else{
           this.$store.commit('ADD_TOTAL_TARGET');
           this.items.push({
@@ -95,7 +95,7 @@ export default {
         }
         
         
-      }.bind(this),1000)
+      }.bind(this),800)
 
     }
 
@@ -186,7 +186,7 @@ export default {
     z-index: 2;
   }
   .list-complete-enter-active{
-    animation: fade-in 1.2s linear;
+    animation: fade-in 1.1s linear;
   }
   .list-complete-leave-active{
   }

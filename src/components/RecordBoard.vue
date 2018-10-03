@@ -17,7 +17,7 @@
           <span class="targetCountRes">{{now.hits}}</span>
         </div>
         <div class="scoreCount">
-          <span>0</span>
+          <span>{{hitsScore}}</span>
         </div>
       </li>
       <li>
@@ -26,7 +26,7 @@
           <span class="targetCountRes">{{now.misses}}</span>
         </div>
         <div class="scoreCount">
-          <span>0</span>
+          <span>{{missesScore}}</span>
         </div>
       </li>
       <li>
@@ -35,7 +35,7 @@
           <span class="targetCountRes">{{now.missesTgt}}</span>
         </div>
         <div class="scoreCount">
-          <span>0</span>
+          <span>{{missesTgtScore}}</span>
         </div>
       </li>
       <li>
@@ -138,10 +138,21 @@ export default {
   methods: {
 
   },
-  computed: mapState([
-    'userAddress',
-    'best'
-  ]),
+  // computed: mapState([
+  //   'userAddress',
+  //   'best'
+  // ]),
+  computed: {
+    ...mapState([
+      'userAddress',
+      'best'
+    ]),
+    ...mapState({
+      hitsScore: state =>state.hitsPoint*state.now.hits,
+      missesScore: state =>state.missesPoint*state.now.misses,
+      missesTgtScore: state =>state.missesTgtPoint*state.now.missesTgt,
+    }),
+  }
 }
 </script>
 
