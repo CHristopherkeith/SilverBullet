@@ -1,11 +1,11 @@
 <template>
   <div class="recordBoard">
-    <!-- <ul class="recordBoardScore">
-      <li class="recordBoardTitle">
-        <span>Address</span>
-        <span class="totalScore">{{userAddress}}</span>
+    <ul class="walletLink" v-show="!hasWalletExt">
+      <li class="recordBoardTitle walletLinkTitle">
+        <!-- <span>Click To Install Wallet</span> -->
+        <span><a href="https://github.com/nebulasio/WebExtensionWallet" target="_window">Click To Install Wallet</a></span>
       </li>
-    </ul> -->
+    </ul>
     <ul class="recordBoardScore">
       <li class="recordBoardTitle">
         <span>Score</span>
@@ -71,7 +71,7 @@
     </ul>
     <ul class="recordBoardPrizes">
       <li class="recordBoardTitle">
-        <span>Prizes</span>
+        <span>Prizes(tentative)</span>
       </li>
       <li>
         <div class="targetCount">
@@ -145,7 +145,8 @@ export default {
   computed: {
     ...mapState([
       'userAddress',
-      'best'
+      'best',
+      'hasWalletExt',
     ]),
     ...mapState({
       hitsScore: state =>state.hitsPoint*state.now.hits,
@@ -183,11 +184,23 @@ export default {
     position: absolute;
     /*top: 0px;*/
   }
+  .walletLinkTitle{
+    /*color: red !important;*/
+    border-bottom: solid 4px red !important;
+  }
+  .walletLinkTitle a{
+    color: red !important;
+    text-decoration: none;
+  }
   .recordBoard>ul>li>div>span{
     color: #B6CCE9;
     font-size: 12px;
     line-height: 16px;
     bottom: 0px;
+  }
+  .walletLink{
+    padding-bottom: 10px;
+    margin-top: -10px;
   }
   .totalScore{
     right: 0px;

@@ -11,7 +11,7 @@
       <br>
       Left target: <span>{{missesTgtPoint > 0 ? `+${missesTgtPoint}` : missesTgtPoint}}</span> pts
     </p>
-    <p class="clickText" :class="{alertCls: alertClsValue}" @click.stop="triggerStart()" v-show="!confirmStatus">{{maskText}}</p>
+    <p class="clickText" :class="{alertCls: alertClsValue&&false}" @click.stop="triggerStart()" v-show="!confirmStatus">{{maskText}}</p>
     <p class="clickText" v-show="confirmStatus">NEW RECORD!SAVE?<span class="confirmRecordYes" @click="confirmRecord(true)">YES</span>/<span class="confirmRecordNo" @click="confirmRecord(false)">NO</span></p>
   </div>
 </template>
@@ -55,27 +55,30 @@ export default {
   methods: {
     triggerStart(e){
       // e.cancelBubble = true;
-      // console.log(event)
-      if(this.hasWalletExt){
+      // if(this.hasWalletExt){
         this.$emit('update:maskShow', false);
         this.$emit('trigger:exactAimingStart');
-      }else{
-        alert('Please Install WebExtensionWallet First');
-      }
+      // }else{
+      //   alert('Please Install WebExtensionWallet First');
+      // }
     },
     confirmRecord(confirmFlag){
       if(confirmFlag){
-        console.log('上传数据');
+        if(!this.hasWalletExt){
+          alert('Please Install WebExtensionWallet First');
+          return;
+        }
+        // this.$store.commit('CHANGE_LOADING_MASK', {
+        //   loadingMaskShow: true
+        // })
         this.$store.dispatch('SAVE_STORE', {
-          // value: JSON.stringify({
-          //   score: 0,
-          //   misses: 0,
-          //   missesTgt: 0
-          // }), 
           type: 'exact'
         })
         .then(
           res => {
+            this.$store.commit('CHANGE_LOADING_MASK', {
+              loadingMaskShow: false
+            })
             if(res.status === 1){
               console.log('【success】')
             }else{
@@ -83,6 +86,9 @@ export default {
             }
           },
           err => {
+            this.$store.commit('CHANGE_LOADING_MASK', {
+              loadingMaskShow: false
+            })
             console.log(err, '【err confirmRecord】')
           }
         )

@@ -1,4 +1,6 @@
 <template>
+<div class="exactaimingRoot">
+  <LoadingMask></LoadingMask>
   <div class="exactaiming">
   	<div class="mainPanel" @click="maskClick">
       <span class="time" v-show="!maskShowValue">{{time}} s</span>
@@ -21,9 +23,11 @@
       <RecordBoard :now="now"></RecordBoard>
     </div>
   </div>
+</div>
 </template>
 
 <script>
+import LoadingMask from './LoadingMask'
 import TheTarget from './TheTarget'
 import ExactAimingMask from './ExactAimingMask'
 import RecordBoard from './RecordBoard'
@@ -31,7 +35,7 @@ import { mapMutations } from 'vuex'
 import { mapState } from 'vuex'
 export default {
   name: 'ExactAiming',
-  components: {TheTarget, ExactAimingMask, RecordBoard},
+  components: {TheTarget, ExactAimingMask, RecordBoard, LoadingMask},
   data () {
     return {
       items: [/*{
@@ -109,7 +113,7 @@ export default {
       this.$store.commit('CHECK_WALLET_EXT');
       console.log(this.hasWalletExt, 'hasWalletExt')
       if(!this.hasWalletExt){
-        this.maskTextValue = 'Please Install WebExtensionWallet First';
+        // this.maskTextValue = 'Please Install WebExtensionWallet First';
       }else{
         // return;
         this.$store.dispatch('GET_USER_ADDRESS').then(
@@ -139,6 +143,10 @@ export default {
 </script>
 
 <style scoped>
+  .exactaimingRoot{
+    width: 100%;
+    height: 100%;
+  }
   .time{
     color: #ffffff;
     position: absolute;

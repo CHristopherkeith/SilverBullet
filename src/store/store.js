@@ -21,6 +21,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
+		loadingMaskShow: false,
 		hitsPoint: 300,
 		missesPoint: -100,
 		missesTgtPoint: -300,
@@ -32,7 +33,7 @@ const store = new Vuex.Store({
 			missesTgt: 0,
 			totalTarget: 0
 		},
-		hasWalletExt: false,
+		hasWalletExt: true,
 		userAddress: '',
 		best: {
 			exactScore: 0,
@@ -95,7 +96,9 @@ const store = new Vuex.Store({
 		[types.SET_PLAYING](state,payload){
 			state.playing = payload.playingState;
 		},
-
+		[types.CHANGE_LOADING_MASK](state,payload){
+			state.loadingMaskShow = payload.loadingMaskShow;
+		}
 
 	},
 	actions: {
@@ -211,8 +214,8 @@ const store = new Vuex.Store({
 			console.log(payload, '【payload】')
 			// let value = payload.value;
 			let value = JSON.stringify({
-				// score: parseInt(state.best.exactScore)+1,
-				score:  state.now.score,
+				score: parseInt(state.best.exactScore)+1,
+				// score:  state.now.score,
 	            misses: state.now.misses,
 	            missesTgt: state.now.missesTgt
 			});
@@ -223,6 +226,9 @@ const store = new Vuex.Store({
 					extension: {openExtension: true},
 					callback: NebPay.config.testnetUrl,
 					listener: (serialNumber, result)=>{
+						commit('CHANGE_LOADING_MASK', {
+				          loadingMaskShow: true
+				        })
 						const intervalQuery = setInterval(()=>{
 							funcIntervalQuery();
 						}, 2000)
