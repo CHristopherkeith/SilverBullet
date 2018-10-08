@@ -82,6 +82,7 @@ export default {
             if(res.status === 1){
               console.log('【success】')
             }else{
+              alert(res.execute_result)
               console.log('【fail】')
             }
           },
@@ -89,6 +90,7 @@ export default {
             this.$store.commit('CHANGE_LOADING_MASK', {
               loadingMaskShow: false
             })
+            alert(err.execute_result)
             console.log(err, '【err confirmRecord】')
           }
         )
