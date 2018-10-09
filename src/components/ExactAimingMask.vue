@@ -81,6 +81,14 @@ export default {
             })
             if(res.status === 1){
               console.log('【success】')
+              this.$store.commit('SET_SCORE', {
+                exactScore: this.$store.state.now.score,
+                exactMisses: this.$store.state.now.misses,
+                exactMissesTgt: this.$store.state.now.missesTgt,
+                pressScore: 0,
+                pressMisses: 0,
+                pressMissesTgt: 0,
+              })
             }else{
               alert(res.execute_result)
               console.log('【fail】')
