@@ -226,6 +226,10 @@ const store = new Vuex.Store({
 					extension: {openExtension: true},
 					callback: NebPay.config.testnetUrl,
 					listener: (serialNumber, result)=>{
+						if( !(result&&Object.prototype.toString.call(result) === '[object Object]') ){
+							console.log('【cancle】')
+							return
+						}
 						commit('CHANGE_LOADING_MASK', {
 				          loadingMaskShow: true
 				        })
