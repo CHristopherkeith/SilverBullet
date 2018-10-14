@@ -41,8 +41,7 @@ export default {
     background-color: gray !important;
   }
   .thetarget{
-    /*background: #00FF00 url(bgimage.gif) no-repeat fixed top;*/
-    background: url(../assets/img/inu.jpg) no-repeat center center;
-    background-size: 100% 100%;
+    /*background: url(../assets/img/inu.jpg) no-repeat center center;
+    background-size: 100% 100%;*/
   }
 </style>
