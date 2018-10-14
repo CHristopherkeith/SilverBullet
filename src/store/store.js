@@ -104,7 +104,7 @@ const store = new Vuex.Store({
 	actions: {
 		[types.GET_USER_ADDRESS]({commit, state, dispatch}){
 			return new Promise((resolve, reject)=>{
-				console.log("********* get account ************")
+				// console.log("********* get account ************")
 			    window.postMessage({
 			        "target": "contentscript",
 			        "data":{
@@ -211,11 +211,9 @@ const store = new Vuex.Store({
 			// })
 		},
 		[types.SAVE_STORE]({commit, state}, payload={type: 'exact'}){
-			console.log(payload, '【payload】')
-			// let value = payload.value;
 			let value = JSON.stringify({
-				score: parseInt(state.best.exactScore)+1,
-				// score:  state.now.score,
+				// score: parseInt(state.best.exactScore)+1,
+				score:  state.now.score,
 	            misses: state.now.misses,
 	            missesTgt: state.now.missesTgt
 			});
@@ -241,7 +239,7 @@ const store = new Vuex.Store({
 							.then(
 								res => {
 									if(res.status === 1 || res.status === 0){
-										console.log(res, '【res getTransactionReceipt】');
+										// console.log(res, '【res getTransactionReceipt】');
 										clearInterval(intervalQuery);
 										resolve(res);
 									}
@@ -273,8 +271,7 @@ const store = new Vuex.Store({
 				   }
 	            }).then(
 	            	res => {
-	            		// let result = JSON.parse(res.result || res);
-	            		console.log(res, '【GET_NUM_OF_PLAYER res】')
+	            		// console.log(res, '【GET_NUM_OF_PLAYER res】')
 	            		resolve(res);
 	            	},
 	            	err => {
@@ -300,8 +297,7 @@ const store = new Vuex.Store({
 				   }
 	            }).then(
 	            	res => {
-	            		// let result = JSON.parse(res.result || res);
-	            		console.log(res, '【FOR_EACH res】')
+	            		// console.log(res, '【FOR_EACH res】')
 	            		resolve(res);
 	            	},
 	            	err => {

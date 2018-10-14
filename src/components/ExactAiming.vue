@@ -13,11 +13,13 @@
       :maskText="maskTextValue"
       :duration="durationValue"
       ></ExactAimingMask>
-      <!-- <ExactAimingMask :maskShow.sync="maskShowValue"></ExactAimingMask> -->
       <transition-group name="list-complete"
         v-on:after-enter="afterEnter">
-        <TheTarget v-for="(item,index) in items" :key="index" :left="item.left" :top="item.top" class="list-complete-item" @addScore="addScore"></TheTarget>
+        <TheTarget v-for="(item,index) in items" :key="index" :left="item.left" :top="item.top" class="list-complete-item" @addScore="addScore" @add:clickMask="addClickMask"></TheTarget>
       </transition-group>
+      <transition name="fade">
+        <ClickMask v-if="ifClickMask" :clickMaskStyle="clickMaskStyleValue"></ClickMask>
+      </transition>
   	</div>
     <div class="scorePanel">
       <RecordBoard :now="now"></RecordBoard>
@@ -27,6 +29,7 @@
 </template>
 
 <script>
+import ClickMask from './ClickMask'
 import LoadingMask from './LoadingMask'
 import TheTarget from './TheTarget'
 import ExactAimingMask from './ExactAimingMask'
@@ -35,7 +38,7 @@ import { mapMutations } from 'vuex'
 import { mapState } from 'vuex'
 export default {
   name: 'ExactAiming',
-  components: {TheTarget, ExactAimingMask, RecordBoard, LoadingMask},
+  components: {TheTarget, ExactAimingMask, RecordBoard, LoadingMask, ClickMask},
   data () {
     return {
       items: [/*{
@@ -48,12 +51,18 @@ export default {
       confirmStatusValue: false,
       maskTextValue: 'CLICK TO START',
       time: 0,
-      durationValue: 10,
+      durationValue: 60,
+      ifClickMask: false,
+      clickMaskStyleValue: {
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0,
+      }
     }
   },
   methods: {
     afterEnter(el){
-      // this.items.splice(el.dataset.index, 1)
       if(el&&el.parentNode){
         el.parentNode.removeChild(el);
         this.$store.commit('ADD_MISSES_TARGET');
@@ -71,7 +80,6 @@ export default {
           tempItem,
           randomLeft,
           randomTop;
-
       timer = setInterval(function(){
         randomLeft = Math.random();
         randomTop = Math.random();
@@ -83,11 +91,11 @@ export default {
             this.maskShowValue = true;
             this.maskTextValue = 'PLAY AGAIN?CLICK!';
             this.time = 0;
-            console.log(this.now.score, 'score')
+            // console.log(this.now.score, 'score')
             if(this.now.score > this.best.exactScore){
               this.confirmStatusValue = true;
             }
-          }.bind(this), 350)
+          }.bind(this), 550)
         }else{
           this.$store.commit('ADD_TOTAL_TARGET');
           this.items.push({
@@ -96,11 +104,16 @@ export default {
             top: randomTop*450
           });
           this.time ++;
-        }
-        
-        
-      }.bind(this),800)
+        }        
+      }.bind(this),700)
 
+    },
+    addClickMask(clickMaskStyleValue){
+      this.ifClickMask = true;
+      this.clickMaskStyleValue = clickMaskStyleValue;
+      setTimeout(()=>{
+        this.ifClickMask = false;
+      },1)
     }
 
   },
@@ -111,26 +124,25 @@ export default {
   ]),
   mounted: function(){
       this.$store.commit('CHECK_WALLET_EXT');
-      console.log(this.hasWalletExt, 'hasWalletExt')
       if(!this.hasWalletExt){
         // this.maskTextValue = 'Please Install WebExtensionWallet First';
       }else{
         // return;
         this.$store.dispatch('GET_USER_ADDRESS').then(
           res => {
-            console.log(res, '【GET_USER_ADDRESS res】');
+            // console.log(res, '【GET_USER_ADDRESS res】');
             this.$store.commit('SET_USER_ADDRESS', res);
             return this.$store.dispatch('GET_ACCOUNT_STATE');
           }
         ).then(
           res => {
-            console.log(res, '【GET_ACCOUNT_STATE res】');
+            // console.log(res, '【GET_ACCOUNT_STATE res】');
             return this.$store.dispatch('GET_STORE', res)
           },
           err => {console.log(err, '【GET_ACCOUNT_STATE err】');}
         ).then(
           res => {
-            console.log(res, '【GET_STORE res】');
+            // console.log(res, '【GET_STORE res】');
             if(res){
               this.$store.commit('SET_SCORE', res);
             }
@@ -153,7 +165,7 @@ export default {
     top: 5px;
     right: 5px;
   }
-	.exactaiming/*, .exactAimingMask*/{
+	.exactaiming{
 		position: absolute;
 		margin: auto;
 		padding: auto;
@@ -163,10 +175,8 @@ export default {
 		bottom: 0;
 		width: 730px;
 		height: 500px;
-		/*background-color: #000000;*/
 	}
   .exactaiming>div{
-    /*display: inline-block;*/
     position: relative;
     float: left;
     height: 100%;
@@ -194,7 +204,7 @@ export default {
     z-index: 2;
   }
   .list-complete-enter-active{
-    animation: fade-in 1.1s linear;
+    animation: fade-in 1.2s linear;
   }
   .list-complete-leave-active{
   }
@@ -209,5 +219,10 @@ export default {
       transform: scale(0);
     }
   }
-	
+  .fade-leave-active {
+    transition: opacity 1.0s;
+  }
+  .fade-leave-to{
+    opacity: 0;
+  }
 </style>
