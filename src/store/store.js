@@ -64,11 +64,13 @@ const store = new Vuex.Store({
 			};
 		},
 		[types.CHECK_WALLET_EXT](state,payload){
-			if(typeof(webExtensionWallet) === "undefined"){
-				state.hasWalletExt = false;
-			}else{
-				state.hasWalletExt = true;
-			}
+			setTimeout(()=>{
+				if(typeof(webExtensionWallet) === "undefined"){
+					state.hasWalletExt = false;
+				}else{
+					state.hasWalletExt = true;
+				}
+			},100)
 		},
 		[types.SET_USER_ADDRESS](state,payload){
 			state.userAddress = payload.userAddress;
