@@ -1,73 +1,48 @@
-# SilverBullet
+# 银色子弹（SilverBullet）
 
-## 一、APP说明
-基于区块链的射击练习游戏  
+> Vue2.x + Vuex + Vue-router + Nebulas + Nebpay + WebExtensionWallet +SmartContract
 
-1.功能设计  
-1.1.准确度Exact Aiming：分数  
-1.2.敏捷度Press Reaction：时间  
+> 声明：该项目创意来自 https://aim400kg.com/ ，仅供学习交流使用，请勿用于其他商业用途。
 
-2.代码设计  
-2.0.界面设计  
-2.1.目标实例  
+## 项目地址
 
-前端实现1：非mvvm框架：  
-1.目标实例为一个dom对象（绑定在js实例对象内）  
-2.空间为普通的html dom对象（可静态创建）  
-3.射击事件由js实例对象监听  
-4.目标实例状态由js实例对象改变  
-5.射击事件成功改变目标组件状态，同时改变积分状态  
+ - [在线预览地址](http://christopherkeith.me/SilverBullet)
+ -  [Github地址](https://github.com/CHristopherkeith/SilverBullet)
 
-前端实现2：mvvm框架：  
-1.目标实例为一个html组件  
-2.空间为一个html组件  
-3.射击事件绑定在目标组件上  
-4.目标组件状态（出现、消失）与某些状态值绑定  
-5.射击事件成功改变目标组件状态，同时改变积分状态  
+## 特性
 
-2.2.子弹实例（射击事件实例）  
-2.3.计分（时间）机制  
-2.4.结果存储  
-2.4.1.上链机制  
-2.4.2.排名机制  
-2.4.3.pk机制（选）  
+- 前端使用vue + vuex + vue-router实现
+- 后端接口及数据存储由区块链智能合约实现（SmartContract）
+- 智能合约部署的公链为星云链（Nebulas）
+- 用户与区块链交互使用网页钱包插件（nebulasio/WebExtensionWallet）
 
-## 二、前端代码  
-前端使用mvvm框架vue  
-根目录下运行  
-1.安装依赖：npm install  
-2.构建：  
-2.1.开发模式：npm run dev  
-2.1.生产模式：npm run build  
+## 相关的库与资源
 
-## 三、智能合约   
-1.智能合约采用星云链作为部署公链，合约代码见contract文件夹  
-1.1.合约地址（测试网已部署）  
-n1jT2w44HcCUtWrR8RxVuwVpk89KhN15GUC  
-1.2.部署txhash  
-2.智能合约设计：    
-2.1.合约数据结构  
-2.1.1.计分对象  
-ScoreContent:  
-{  
-    exactScore: null,  
-    exactMisses: null,  
-    exactMissesTgt: null,  
-    pressScore: null,  
-    pressMisses: null,  
-    pressMissesTgt: null  
-}  
-SilverBulletContract:  
-{  
-    userAddress1: JSON.stringify(ScoreContent1),  
-    userAddress2: JSON.stringify(ScoreContent2),  
-    ......,  
-    userAddressN: JSON.stringify(ScoreContentN),  
-}  
-3.部署到区块链......  
-4.钱包安装......  
+- [Vue.js](https://vuejs.org/)
+- [vue-router](https://router.vuejs.org/)
+- [vuex](https://vuex.vuejs.org/)
+- [Nebulas（星云链接口）](https://github.com/nebulasio/neb.js)
+- [Nebpay（星云链支付接口）](https://github.com/nebulasio/nebPay)
+- [WebExtensionWallet（星云链浏览器钱包插件）](https://github.com/nebulasio/WebExtensionWallet)
+- [SmartContract（星云链智能合约）](https://github.com/nebulasio/wiki/tree/master/tutorials)
 
-## 四、疑问  
-1.游戏加密？     
-2.激励机制？  
-3.插件状态？  
+
+## 工程构建
+
+```bash
+# 安装依赖
+npm install
+
+# 开发模式，运行在localhost:8080
+npm run dev
+
+# 生产模式
+npm run build
+```
+
+## 备注
+ - 该项目采用的环境为nebulas测试网，需要使用主网环境请使用mainnetUrl
+
+## License
+
+This project is available under the MIT license.
