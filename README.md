@@ -73,4 +73,3 @@ SilverBulletContract:
 3.激励机制？  
 4.成功后刷新分数？  
 5.取消异常？ 
-6.update branch test   
