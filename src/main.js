@@ -4,7 +4,11 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store/store'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 import { mapMutations } from 'vuex'
+
+Vue.use(VueAxios, axios)
 
 Vue.config.productionTip = false
 

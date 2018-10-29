@@ -123,6 +123,17 @@ export default {
     'hasWalletExt'
   ]),
   mounted: function(){
+      this.axios.post('/meter_vis/foo', {
+        a: 'a',
+        b: 'b'
+      })
+      .then(function (res){
+        console.log(res, 'res');
+      })
+      .catch(function (err) {
+        console.log(err, '【err】');
+      })
+
       this.$store.commit('CHECK_WALLET_EXT');
       if(!this.hasWalletExt){
         // this.maskTextValue = 'Please Install WebExtensionWallet First';
