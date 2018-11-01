@@ -11,11 +11,18 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-        '/meter_vis': {
-            target: 'http://localhost:3000/meter_vis',
+        // '/meter_vis': {
+        //     target: 'http://localhost:3000/meter_vis',
+        //     changeOrigin: true,
+        //     pathRewrite: {
+        //         '^/meter_vis': ''
+        //     }
+        // }
+        '/silver_bullets': {
+            target: 'http://localhost:3000/silver_bullets',
             changeOrigin: true,
             pathRewrite: {
-                '^/meter_vis': ''
+                '^/silver_bullets': ''
             }
         }
     },
