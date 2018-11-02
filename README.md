@@ -1,6 +1,6 @@
 # 银色子弹（SilverBullet）
 
-> 此分支为该项目基于ruby on rails为后端服务器的开发分支，暂不提供完整功能，基于前端+区块链的完整构建见master分支
+> 此分支为该项目基于ruby on rails为后端服务器的开发分支，已废弃，新项目见：https://github.com/CHristopherkeith/SilverBulletRails
 
 > Vue2.x + Vuex + Vue-router + Nebulas + Nebpay + WebExtensionWallet +SmartContract
 
